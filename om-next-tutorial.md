@@ -233,6 +233,8 @@ called.
 
 ## Adding in the remote<a id="sec-4-3" name="sec-4-3"></a>
 
+GIT BRANCH: simple-remote
+
 So we want to send our stuff to a backend server.  Om next creates a
 default hook for this.  So basically what happens again, is that our
 reader will get called twice, once for trying to satisfy our query
@@ -258,12 +260,22 @@ And lets wire this into the reconciler.
         :parser parser
         :send my-remoter}))
 
-GIT BRANCH: simple-remote
+And finally our reader needs to return `:remote true` for the remote
+to run:
 
-We can verify that at the REPL:
+    (defmethod reader :default
+      [{st :state :as env} key _]
+      (log "default reader" key "env:target" (:target env))
+      {:value (key (om/db->tree [key] @st @st))
+       :remote true})
 
-    omn1.webpage> @app-state
-    {:user/authenticated false}
+    [default reader]: :some-param env:target null
+    [props]: {:some-param "not much"}meta
+    [default reader]: :some-param env:target :remote
+    [remote query]: {:remote [:some-param]}
+    [default reader]: :some-param env:target null
+    [props]: {:some-param "value gotten from remote!"}meta
+    [default reader]: :some-param env:target null
 
 # Send username & password<a id="sec-5" name="sec-5"></a>
 

@@ -216,6 +216,8 @@ called.
 
 ** Adding in the remote
 
+GIT BRANCH: simple-remote
+
 So we want to send our stuff to a backend server.  Om next creates a
 default hook for this.  So basically what happens again, is that our
 reader will get called twice, once for trying to satisfy our query
@@ -245,19 +247,26 @@ And lets wire this into the reconciler.
     :send my-remoter}))
 #+END_SRC
 
-GIT BRANCH: simple-remote
-
-
-
-
-
-We can verify that at the REPL:
+And finally our reader needs to return ~:remote true~ for the remote
+to run:
 
 #+BEGIN_SRC clojure
-omn1.webpage> @app-state
-{:user/authenticated false}
+  (defmethod reader :default
+    [{st :state :as env} key _]
+    (log "default reader" key "env:target" (:target env))
+    {:value (key (om/db->tree [key] @st @st))
+     :remote true})
 #+END_SRC
 
+#+BEGIN_SRC config
+[default reader]: :some-param env:target null
+[props]: {:some-param "not much"}meta
+[default reader]: :some-param env:target :remote
+[remote query]: {:remote [:some-param]}
+[default reader]: :some-param env:target null
+[props]: {:some-param "value gotten from remote!"}meta
+[default reader]: :some-param env:target null
+#+END_SRC
 
 
 
