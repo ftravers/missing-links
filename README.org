@@ -10,4 +10,4 @@ of the topic.  Without further ado...
 
 * Tutorials
 
-[[https://github.com/ftravers/datomic-tutorial]]
+[[https://github.com/ftravers/datomic-tutorial][Beginner Datomic Tutorial]]

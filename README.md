@@ -18,4 +18,4 @@ of the topic.  Without further ado&#x2026;
 
 # Tutorials<a id="sec-2" name="sec-2"></a>
 
-<https://github.com/ftravers/datomic-tutorial>
+[Beginner Datomic Tutorial](https://github.com/ftravers/datomic-tutorial)
