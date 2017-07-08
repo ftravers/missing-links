@@ -3,7 +3,12 @@
 <div id="text-table-of-contents">
 <ul>
 <li><a href="#sec-1">1. About Missing Link Tutorials</a></li>
-<li><a href="#sec-2">2. Tutorials</a></li>
+<li><a href="#sec-2">2. Tutorials</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Completed</a></li>
+<li><a href="#sec-2-2">2.2. In Progress</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -18,5 +23,10 @@ of the topic.  Without further ado&#x2026;
 
 # Tutorials<a id="sec-2" name="sec-2"></a>
 
+## Completed<a id="sec-2-1" name="sec-2-1"></a>
+
 [Beginner Datomic Tutorial](https://github.com/ftravers/datomic-tutorial)
+
+## In Progress<a id="sec-2-2" name="sec-2-2"></a>
+
 [Om Next Tutorial](https://github.com/ftravers/omn1/blob/login-step1/om-next-tutorial.md)
