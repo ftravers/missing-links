@@ -29,4 +29,4 @@ of the topic.  Without further ado&#x2026;
 
 ## In Progress<a id="sec-2-2" name="sec-2-2"></a>
 
-[Om Next Tutorial](https://github.com/ftravers/omn1/blob/login-step1/om-next-tutorial.md)
+[Om Next Tutorial](om-next-tutorial.md)

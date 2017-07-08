@@ -14,4 +14,4 @@ of the topic.  Without further ado...
 [[https://github.com/ftravers/datomic-tutorial][Beginner Datomic Tutorial]]
 
 ** In Progress
-[[https://github.com/ftravers/omn1/blob/login-step1/om-next-tutorial.md][Om Next Tutorial]] 
+[[file:om-next-tutorial.md][Om Next Tutorial]]
