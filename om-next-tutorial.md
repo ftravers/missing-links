@@ -23,6 +23,7 @@
 </ul>
 </li>
 <li><a href="#sec-4-2">4.2. lifecycle logged to console</a></li>
+<li><a href="#sec-4-3">4.3. Adding in the remote</a></li>
 </ul>
 </li>
 <li><a href="#sec-5">5. Send username &amp; password</a></li>
@@ -229,6 +230,35 @@ how to trigger a remote read.  When our reader is getting called with
 the `:target` a remote, if we then also return `:remote true` in our
 returned map from the reader, then our remote functions will also be
 called. 
+
+## Adding in the remote<a id="sec-4-3" name="sec-4-3"></a>
+
+So we want to send our stuff to a backend server.  Om next creates a
+default hook for this.  So basically what happens again, is that our
+reader will get called twice, once for trying to satisfy our query
+from our local state, and once for trying to get the information from
+the backend.
+
+If we return `:remote true` in our reader response map, the remote
+hooks will get triggered.  So lets see this in action.  First lets
+wire up some basic 'remotes'.
+
+First we must write a function that will be our remote query hook:
+
+    (defn my-remoter
+      [qry cb]
+      (log "remote query" (str qry))
+      (cb {:some-param "some value"}))
+
+And lets wire this into the reconciler.
+
+    (def reconciler
+      (om/reconciler
+       {:state app-state
+        :parser parser
+        :send my-remoter}))
+
+GIT BRANCH: simple-remote
 
 We can verify that at the REPL:
 

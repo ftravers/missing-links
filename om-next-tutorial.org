@@ -214,6 +214,39 @@ the ~:target~ a remote, if we then also return ~:remote true~ in our
 returned map from the reader, then our remote functions will also be
 called. 
 
+** Adding in the remote
+
+So we want to send our stuff to a backend server.  Om next creates a
+default hook for this.  So basically what happens again, is that our
+reader will get called twice, once for trying to satisfy our query
+from our local state, and once for trying to get the information from
+the backend.
+
+If we return ~:remote true~ in our reader response map, the remote
+hooks will get triggered.  So lets see this in action.  First lets
+wire up some basic 'remotes'.
+
+First we must write a function that will be our remote query hook:
+
+#+BEGIN_SRC clojure
+  (defn my-remoter
+    [qry cb]
+    (log "remote query" (str qry))
+    (cb {:some-param "some value"}))
+#+END_SRC
+
+And lets wire this into the reconciler.
+
+#+BEGIN_SRC clojure
+(def reconciler
+  (om/reconciler
+   {:state app-state
+    :parser parser
+    :send my-remoter}))
+#+END_SRC
+
+GIT BRANCH: simple-remote
+
 
 
 
