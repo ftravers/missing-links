@@ -187,7 +187,7 @@ understand it.
 [default reader]: :user/authenticated env:target :remote (ref:remote)
 #+END_SRC
 
-In line: [[(load-comp1)]], the query of the component is run before the
+In line: [[(load-comp)]] the query of the component is run before the
 component is first loaded.
 
 In line: [[(load-comp2)]], as the component is rendered we dump the react
@@ -258,18 +258,24 @@ to run:
      :remote true})
 #+END_SRC
 
-#+BEGIN_SRC config
+Now lets see what happens as we trace the programs execution with some
+logging statements
+
+#+BEGIN_SRC config -n -r
 [default reader]: :some-param env:target null
 [props]: {:some-param "not much"}meta
 [default reader]: :some-param env:target :remote
-[remote query]: {:remote [:some-param]}
+[remote query]: {:remote [:some-param]} (ref:remote-query)
+[app state]: {:some-param "not much"}
 [default reader]: :some-param env:target null
 [props]: {:some-param "value gotten from remote!"}meta
+[app state]: {:some-param "value gotten from remote!"}
 [default reader]: :some-param env:target null
 #+END_SRC
 
+The first three lines remain unchanged.
 
-
+[[(remote-query)]] 
 
 
 * Send username & password

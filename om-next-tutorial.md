@@ -206,7 +206,7 @@ understand it.
     2  [props]: {:user/authenticated false}
     3  [default reader]: :user/authenticated env:target :remote
 
-In line: 1, the query of the component is run before the
+In line: nil the query of the component is run before the
 component is first loaded.
 
 In line: 2, as the component is rendered we dump the react
@@ -269,13 +269,22 @@ to run:
       {:value (key (om/db->tree [key] @st @st))
        :remote true})
 
-    [default reader]: :some-param env:target null
-    [props]: {:some-param "not much"}meta
-    [default reader]: :some-param env:target :remote
-    [remote query]: {:remote [:some-param]}
-    [default reader]: :some-param env:target null
-    [props]: {:some-param "value gotten from remote!"}meta
-    [default reader]: :some-param env:target null
+Now lets see what happens as we trace the programs execution with some
+logging statements
+
+    1  [default reader]: :some-param env:target null
+    2  [props]: {:some-param "not much"}meta
+    3  [default reader]: :some-param env:target :remote
+    4  [remote query]: {:remote [:some-param]}
+    5  [app state]: {:some-param "not much"}
+    6  [default reader]: :some-param env:target null
+    7  [props]: {:some-param "value gotten from remote!"}meta
+    8  [app state]: {:some-param "value gotten from remote!"}
+    9  [default reader]: :some-param env:target null
+
+The first three lines remain unchanged.
+
+4 
 
 # Send username & password<a id="sec-5" name="sec-5"></a>
 
