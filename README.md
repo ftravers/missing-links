@@ -25,7 +25,7 @@ of the topic.  Without further ado&#x2026;
 
 ## Completed<a id="sec-2-1" name="sec-2-1"></a>
 
-[Beginner Datomic Tutorial](https://github.com/ftravers/datomic-tutorial)
+[Beginner Datomic Tutorial](datomic-tutorial.md)
 
 ## In Progress<a id="sec-2-2" name="sec-2-2"></a>
 
