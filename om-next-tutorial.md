@@ -23,18 +23,26 @@
 </ul>
 </li>
 <li><a href="#sec-4-2">4.2. lifecycle logged to console</a></li>
-<li><a href="#sec-4-3">4.3. Adding in the remote</a></li>
+<li><a href="#sec-4-3">4.3. Adding in a fake remote</a></li>
+<li><a href="#sec-4-4">4.4. A real remote</a></li>
 </ul>
 </li>
-<li><a href="#sec-5">5. Send username &amp; password</a></li>
-<li><a href="#sec-6">6. Datomic - the backend</a>
+<li><a href="#sec-5">5. My choice of transport</a></li>
+<li><a href="#sec-6">6. Om Next Backend</a>
 <ul>
-<li><a href="#sec-6-1">6.1. Data Structure</a></li>
+<li><a href="#sec-6-1">6.1. The transport to om-next server boundary</a></li>
+<li><a href="#sec-6-2">6.2. Backend Parser</a></li>
 </ul>
 </li>
-<li><a href="#sec-7">7. Front End (om-next)</a></li>
-<li><a href="#sec-8">8. Om-Next Remotes</a></li>
-<li><a href="#sec-9">9. Database Structure</a></li>
+<li><a href="#sec-7">7. Send username &amp; password</a></li>
+<li><a href="#sec-8">8. Datomic - the backend</a>
+<ul>
+<li><a href="#sec-8-1">8.1. Data Structure</a></li>
+</ul>
+</li>
+<li><a href="#sec-9">9. Front End (om-next)</a></li>
+<li><a href="#sec-10">10. Om-Next Remotes</a></li>
+<li><a href="#sec-11">11. Database Structure</a></li>
 </ul>
 </div>
 </div>
@@ -231,9 +239,10 @@ the `:target` a remote, if we then also return `:remote true` in our
 returned map from the reader, then our remote functions will also be
 called. 
 
-## Adding in the remote<a id="sec-4-3" name="sec-4-3"></a>
+## Adding in a fake remote<a id="sec-4-3" name="sec-4-3"></a>
 
-GIT BRANCH: simple-remote
+GIT REPO: <https://github.com/ftravers/omn1>
+BRANCH: simple-remote
 
 So we want to send our stuff to a backend server.  Om next creates a
 default hook for this.  So basically what happens again, is that our
@@ -284,9 +293,175 @@ logging statements
 
 The first three lines remain unchanged.
 
-4 
+On line: 4, we see we've entered into the hook for the
+remote function.  We dump the `@app-state` on line:
+5, before we call the callback, `cb`, with our
+new data, which should merge the data into our `@app-state` map.  The
+callback is called and we can see that the `@app-state` is updated and
+the component is re-rendered.
 
-# Send username & password<a id="sec-5" name="sec-5"></a>
+I'm not quite sure why the reader is called at the end&#x2026;but maybe
+someone who knows om-next better can explain that.
+
+## A real remote<a id="sec-4-4" name="sec-4-4"></a>
+
+At this point we aren't hooking into any backend, we are just stubbing
+out the call to the backend.  To have a real call to a backend
+involves taking our request and sending via `http`, `json`,
+`websockets`, `edn`, or some other way to our backend.  Receiving the
+data, doing something with it and creating a response and sending it
+back, then getting it back on the client, and updating the local
+client data and therefore updating the client webpage.
+
+So that is a lot of stuff.  Don't dispair, I will demonstrate real
+code that does this, but the scope of this tutorial is to demonstrate
+how to use om-next with a remote.  How exactly data is exchanged with
+a remote is actually a separate concern.  This is actually a wonderful
+thing.  As clojuristas we dont like monolithic frameworks that package
+the entire world into an opinionated whole.  Perhaps like a rails
+project.  We would rather pick the pieces that best suit our needs,
+and data transport between client and server is not something that om
+next has an opinion on and it lets you fill in that blank however you
+would like.
+
+What we need to be clear on is the boundaries between the transport
+segment and om next.  So lets reiterate that now to be absolutely
+clear.
+
+This boundary or responsibility handoff occurs in our `my-remoter`
+function.  Om next hands us the data of the query that we've put into
+the `qry` parameter, then it expects us to call the callback, `cb`,
+with the results of our remote query.  We'll look into detail of what
+the shape of the data is that om next expects us to return the result
+in.
+
+Here is a sample of data in and data out that om next would be happy
+with:
+
+IN:
+
+    [:some-param]
+
+OUT:
+
+    {:some-param "Some New Value"}
+
+# My choice of transport<a id="sec-5" name="sec-5"></a>
+
+I have written simple websocket client and server libraries that I
+use.  They are located at:
+
+<https://github.com/ftravers/websocket-client>
+
+and
+
+<https://github.com/ftravers/websocket-server>
+
+I have chosen to send EDN over this websocket connection.
+
+Another perhaps better choice would be to send JSON over Transit.
+Perhaps using a Ring server or some other type of web server.  My
+websocket server uses http-kit to act as the websocket server.
+
+Again, what you use is really beyond the scope of this tutorial, and I
+dont want this tutorial to get bogged down in those details, since it
+would detract from this tutorials purpose which is solely to educate a
+user on how to create a semi-typical client server app using om-next
+and datomic.
+
+Even the use of datomic should be minimized.  Truely this tutorial is
+about how to use om-next in a client server setup, somewhat agnostic
+to whatever the backend database of choice is.
+
+So with those caveats declared lets look into what an om-next backend
+might look like.
+
+# Om Next Backend<a id="sec-6" name="sec-6"></a>
+
+Clone the git project:
+
+<https://github.com/ftravers/omn1be>
+
+The project name, omn1be, is the abbreviation of Om Next version 1
+Back End.
+
+Again here we need to be clear of where the handoff occurs from the
+choice of wire or transport architecture occurs and where we enter the
+land of om-next for the backend.  Lets inspect the file layout for the
+project first:
+
+    ╭─fenton@ss9 ~/projects ‹system› ‹master*› 
+    ╰─➤  cd omn1be
+    ╭─fenton@ss9 ~/projects/omn1be ‹system› ‹upper-case› 
+    ╰─➤  tree src
+    src
+    `-- omn1be
+        |-- core.clj
+        |-- router.clj
+        `-- websocket.clj
+
+The `core.clj` file has all the information about the datomic
+database.  It has the schema, the testdata, etc.  If you need more
+help understanding how datomic works, please checkout my tutorial at: 
+
+[Beginner Datomic Tutorial](https://github.com/ftravers/missing-links/blob/master/datomic-tutorial.md)
+
+Again, I will highlight the boundaries of the durability layer
+(i.e. the database), and om-next server side.
+
+The file: `websocket.clj`, is the servers side of the transport
+layer.  Again you could sub this out with whatever type of transport
+you wanted to do.
+
+Finally, the file: `router.clj` is truely the om-next server side.  If
+you want to do om-next on the server side then this file will be the
+most interesting for you.
+
+## The transport to om-next server boundary<a id="sec-6-1" name="sec-6-1"></a>
+
+Lets point out where the boundary of the server end of the transport
+layer to the om-next server is.
+
+Have a look at the
+
+GIT BRANCH: full-working-basic-backend
+
+To fire up the backend you could do:
+
+    $ cd omn1be; lein repl
+    (load "websocket") (in-ns 'omn1be.websocket) (start) (in-ns 'omn1be.router)
+
+Then to test it without our front end, we could use the "Simple
+Websocket Client" chrome extension.
+
+The websocket URL end point is: `ws://localhost:7890`
+
+Then we can send the following data in it:
+
+    [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+
+Here is a log of some sent requests and their response from the
+server:
+
+    [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+    {:user/authenticated true}
+    [(:user/authenticated {:user/name "fenton" :user/password "password"})]
+    {:user/authenticated false}
+
+## Backend Parser<a id="sec-6-2" name="sec-6-2"></a>
+
+So we can see that all we are sending over the wire is an om next
+parameterized query.
+
+    [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+
+If we create a server side reader and parser, we can pass this query
+to it and it will act almost the same as the front end.
+
+When we develop an om next backend there is a symmetry to the front
+end.  Again we will create a reader function 
+
+# Send username & password<a id="sec-7" name="sec-7"></a>
 
 So we can send something to the backend using:
 
@@ -296,9 +471,9 @@ So we can send something to the backend using:
         {:user/name "fenton"
          :user/password "passwErd"})])
 
-# Datomic - the backend<a id="sec-6" name="sec-6"></a>
+# Datomic - the backend<a id="sec-8" name="sec-8"></a>
 
-## Data Structure<a id="sec-6-1" name="sec-6-1"></a>
+## Data Structure<a id="sec-8-1" name="sec-8-1"></a>
 
 Imagine we have datomic data that looks like:
 
@@ -352,7 +527,7 @@ So we have (kind of) demonstrated how we can extract data from
 datomic, lets see if we can get this to jive with the om-next front
 end now.
 
-# Front End (om-next)<a id="sec-7" name="sec-7"></a>
+# Front End (om-next)<a id="sec-9" name="sec-9"></a>
 
 Now we need to structure the front end so we can easily get this info
 from the backend.
@@ -386,7 +561,7 @@ on the surface this looks great.  Next we'll look at how om-next
 queries a backend and how it merges the results into the local data
 structure.
 
-# Om-Next Remotes<a id="sec-8" name="sec-8"></a>
+# Om-Next Remotes<a id="sec-10" name="sec-10"></a>
 
 Om-next remotes are handled in a function definition.  This function
 can be passed anything that the reader has.  A good place to look at
@@ -403,7 +578,7 @@ state store, and the data that you are passing into the callback.
 Lets look at the aspect of returning data from a remote function and
 seeing how/what is able to be merged into your local state store.
 
-# Database Structure<a id="sec-9" name="sec-9"></a>
+# Database Structure<a id="sec-11" name="sec-11"></a>
 
 A big part of om-next is that it creates norms about how to store your
 application data.  Often we have pieces of data that appear in

@@ -67,7 +67,6 @@ omn1be.router=> (api {:function :user/login :params {:user/name "fenton", :user/
 {:valid-user true}
 #+END_SRC
 
-
 * Om Next lifecycle stages
 
 Our code has one root UI component.  This component has a query for
@@ -214,9 +213,9 @@ the ~:target~ a remote, if we then also return ~:remote true~ in our
 returned map from the reader, then our remote functions will also be
 called. 
 
-** Adding in the remote
-
-GIT BRANCH: simple-remote
+** Adding in a fake remote
+GIT REPO: https://github.com/ftravers/omn1
+BRANCH: simple-remote
 
 So we want to send our stuff to a backend server.  Om next creates a
 default hook for this.  So basically what happens again, is that our
@@ -266,7 +265,7 @@ logging statements
 [props]: {:some-param "not much"}meta
 [default reader]: :some-param env:target :remote
 [remote query]: {:remote [:some-param]} (ref:remote-query)
-[app state]: {:some-param "not much"}
+[app state]: {:some-param "not much"} (ref:app-state-before-remote)
 [default reader]: :some-param env:target null
 [props]: {:some-param "value gotten from remote!"}meta
 [app state]: {:some-param "value gotten from remote!"}
@@ -275,7 +274,188 @@ logging statements
 
 The first three lines remain unchanged.
 
-[[(remote-query)]] 
+On line: [[(remote-query)]], we see we've entered into the hook for the
+remote function.  We dump the ~@app-state~ on line:
+[[(app-state-before-remote)]], before we call the callback, ~cb~, with our
+new data, which should merge the data into our ~@app-state~ map.  The
+callback is called and we can see that the ~@app-state~ is updated and
+the component is re-rendered.
+
+I'm not quite sure why the reader is called at the end...but maybe
+someone who knows om-next better can explain that.
+
+** A real remote
+
+At this point we aren't hooking into any backend, we are just stubbing
+out the call to the backend.  To have a real call to a backend
+involves taking our request and sending via ~http~, ~json~,
+~websockets~, ~edn~, or some other way to our backend.  Receiving the
+data, doing something with it and creating a response and sending it
+back, then getting it back on the client, and updating the local
+client data and therefore updating the client webpage.
+
+So that is a lot of stuff.  Don't dispair, I will demonstrate real
+code that does this, but the scope of this tutorial is to demonstrate
+how to use om-next with a remote.  How exactly data is exchanged with
+a remote is actually a separate concern.  This is actually a wonderful
+thing.  As clojuristas we dont like monolithic frameworks that package
+the entire world into an opinionated whole.  Perhaps like a rails
+project.  We would rather pick the pieces that best suit our needs,
+and data transport between client and server is not something that om
+next has an opinion on and it lets you fill in that blank however you
+would like.
+
+What we need to be clear on is the boundaries between the transport
+segment and om next.  So lets reiterate that now to be absolutely
+clear.
+
+This boundary or responsibility handoff occurs in our ~my-remoter~
+function.  Om next hands us the data of the query that we've put into
+the ~qry~ parameter, then it expects us to call the callback, ~cb~,
+with the results of our remote query.  We'll look into detail of what
+the shape of the data is that om next expects us to return the result
+in.
+
+Here is a sample of data in and data out that om next would be happy
+with:
+
+IN:
+
+#+BEGIN_SRC clojure
+  [:some-param]
+#+END_SRC
+
+OUT:
+
+#+BEGIN_SRC clojure
+  {:some-param "Some New Value"}
+#+END_SRC
+
+* My choice of transport
+
+I have written simple websocket client and server libraries that I
+use.  They are located at:
+
+https://github.com/ftravers/websocket-client
+
+and
+
+https://github.com/ftravers/websocket-server
+
+I have chosen to send EDN over this websocket connection.
+
+Another perhaps better choice would be to send JSON over Transit.
+Perhaps using a Ring server or some other type of web server.  My
+websocket server uses http-kit to act as the websocket server.
+
+Again, what you use is really beyond the scope of this tutorial, and I
+dont want this tutorial to get bogged down in those details, since it
+would detract from this tutorials purpose which is solely to educate a
+user on how to create a semi-typical client server app using om-next
+and datomic.
+
+Even the use of datomic should be minimized.  Truely this tutorial is
+about how to use om-next in a client server setup, somewhat agnostic
+to whatever the backend database of choice is.
+
+So with those caveats declared lets look into what an om-next backend
+might look like.
+
+* Om Next Backend
+
+Clone the git project:
+
+https://github.com/ftravers/omn1be
+
+The project name, omn1be, is the abbreviation of Om Next version 1
+Back End.
+
+Again here we need to be clear of where the handoff occurs from the
+choice of wire or transport architecture occurs and where we enter the
+land of om-next for the backend.  Lets inspect the file layout for the
+project first:
+
+#+BEGIN_SRC config
+╭─fenton@ss9 ~/projects ‹system› ‹master*› 
+╰─➤  cd omn1be
+╭─fenton@ss9 ~/projects/omn1be ‹system› ‹upper-case› 
+╰─➤  tree src
+src
+`-- omn1be
+    |-- core.clj
+    |-- router.clj
+    `-- websocket.clj
+#+END_SRC
+
+The ~core.clj~ file has all the information about the datomic
+database.  It has the schema, the testdata, etc.  If you need more
+help understanding how datomic works, please checkout my tutorial at: 
+
+[[https://github.com/ftravers/missing-links/blob/master/datomic-tutorial.md][Beginner Datomic Tutorial]]
+
+Again, I will highlight the boundaries of the durability layer
+(i.e. the database), and om-next server side.
+
+The file: ~websocket.clj~, is the servers side of the transport
+layer.  Again you could sub this out with whatever type of transport
+you wanted to do.
+
+Finally, the file: ~router.clj~ is truely the om-next server side.  If
+you want to do om-next on the server side then this file will be the
+most interesting for you.
+
+** The transport to om-next server boundary
+
+Lets point out where the boundary of the server end of the transport
+layer to the om-next server is.
+
+Have a look at the
+
+GIT BRANCH: full-working-basic-backend
+
+To fire up the backend you could do:
+
+#+BEGIN_SRC 
+$ cd omn1be; lein repl
+(load "websocket") (in-ns 'omn1be.websocket) (start) (in-ns 'omn1be.router)
+#+END_SRC
+
+Then to test it without our front end, we could use the "Simple
+Websocket Client" chrome extension.
+
+The websocket URL end point is: ~ws://localhost:7890~
+
+Then we can send the following data in it:
+
+#+BEGIN_SRC clojure
+[(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+#+END_SRC
+
+Here is a log of some sent requests and their response from the
+server:
+
+#+BEGIN_SRC clojure
+[(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+{:user/authenticated true}
+[(:user/authenticated {:user/name "fenton" :user/password "password"})]
+{:user/authenticated false}
+#+END_SRC
+
+** Backend Parser 
+
+So we can see that all we are sending over the wire is an om next
+parameterized query.
+
+#+BEGIN_SRC clojure
+[(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+#+END_SRC
+
+If we create a server side reader and parser, we can pass this query
+to it and it will act almost the same as the front end.
+
+
+When we develop an om next backend there is a symmetry to the front
+end.  Again we will create a reader function 
 
 
 * Send username & password
