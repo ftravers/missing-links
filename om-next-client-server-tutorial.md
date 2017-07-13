@@ -121,14 +121,11 @@ form, lets extract it now.
 *Git Branch*: `remove-state`
 
 Now we move the data from being hard coded inside the component to an
-external light weight database.
+external light weight database.  Parts that are redundant from
+previous examples are elided.
 
 ```clojure
-    (ns omn1.webpage
-      (:require
-       [om.next :as om :refer-macros [defui]]
-       [om.dom :as dom :refer [div]]
-       [goog.dom :as gdom]))
+    ;; ...
     
     (defui SimpleUI
       Object
@@ -143,16 +140,41 @@ external light weight database.
       (om/reconciler
        {:state app-state}))
     
-    (om/add-root!
-     reconciler
-     SimpleUI
-     (gdom/getElement "app"))
+    ;; ...
 
 ```
 
 # Add Query, Parser, Reader<a id="sec-5" name="sec-5"></a>
 
 *Git Branch*: `add-reader-query-parser`
+
+```clojure
+    ;; ...
+    (defui SimpleUI
+      static om/IQuery
+      (query [_] [:greeting])
+    
+      ;; ...
+      )
+    
+    ;; ...
+    
+    (defn my-reader
+      [env kee parms]
+      (.log js/console (:target env))
+      {:value "abc"})
+    
+    (def parser
+      (om/parser {:read my-reader}))
+    
+    (def reconciler
+      (om/reconciler
+       {:state app-state
+        :parser parser}))
+    
+    ;; ...
+
+```
 
 Now the application looks quite a bit more complicated.  We've added a
 query to the component, a reader function and a parser.
