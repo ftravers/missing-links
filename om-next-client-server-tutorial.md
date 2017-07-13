@@ -95,11 +95,15 @@ World".
      (om/reconciler {})
      SimpleUI
      (gdom/getElement "app"))
+
 ```
 
 The line:
 
+```clojure
     (om/reconciler {})
+
+```
 
 is a bit redundant in this example, but its a required argument to the
 `add-root!` function, so we include it.  It doesn't do anything at
@@ -118,6 +122,7 @@ Git Branch: `remove-state`
 Now we move the data from being hard coded inside the component to an
 external light weight database.
 
+```clojure
     (ns omn1.webpage
       (:require
        [om.next :as om :refer-macros [defui]]
@@ -142,6 +147,8 @@ external light weight database.
      SimpleUI
      (gdom/getElement "app"))
 
+```
+
 # Add Query, Parser, Reader<a id="sec-5" name="sec-5"></a>
 
 Git Branch: `add-reader-query-parser`
@@ -151,12 +158,18 @@ query to the component, a reader function and a parser.
 
 Run the program and inspect the console.  The code:
 
+```clojure
     (.log js/console (:target env))
+
+```
 
 causes the following output:
 
+```clojure
     null
     :remote
+
+```
 
 Om-next will run the reader function once for a local query, and once
 for any remotes that are defined.  We haven't define any remote end
@@ -209,7 +222,10 @@ We also wire it up in the reconciler by passing the function to the
 Finally lets hardcode in a username password pair.  If you look at the
 console of the browser then, you'll see the following data spit out:
 
+```clojure
     [(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+
+```
 
 So this is the data that our client will send to our server.  This is
 EDN.  
@@ -228,7 +244,10 @@ Transit with REST might be another good way.
 
 In our example we are using this data:
 
+```clojure
     [(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+
+```
 
 Please keep this front and center in your mind.  Any good integration
 is going to be all about data and only data.  Here we have a classic
@@ -246,7 +265,10 @@ So lets switch gears and head over and build up an om-next server.
 So continuing on with our example, by some mechanism, the piece of
 data:
 
+```clojure
     [(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+
+```
 
 is going to arrive.  We will fill in the plumbing between the client
 and server later.  Remember that is not the focus of this tutorial, so
@@ -266,6 +288,7 @@ Checkout the project and branch and launch your REPL.
 
 Now try some tests in the REPL:
 
+```clojure
     omn1be.core> (parser {:state users}
                          '[(:user/authenticated
                             {:user/name "fenton"
@@ -278,11 +301,14 @@ Now try some tests in the REPL:
                              :user/password "passwErd"})])
     #:user{:authenticated true}
 
+```
+
 Lets quickly look at our reader function, even though it doesn't
 present any new ideas.  The input params are the same as on the
 client, and just like the client we simply return a map with the
 answer attached to the `:value` key.
 
+```clojure
     (defn reader
       [env kee params]
       (let [userz (:state env)
@@ -290,9 +316,14 @@ answer attached to the `:value` key.
             password (:user/password params)]
         {:value (valid-user userz username password)}))
 
+```
+
 And our parser is dead simple:
 
+```clojure
     (def parser (om/parser {:read reader}))
+
+```
 
 Thats all there is to a basic om-next server.
 
@@ -305,12 +336,18 @@ projects, `omn1` and `omn1be`.
 
 Start the backend at the command prompt:
 
+```clojure
     cd omn1be; lein repl
     (load "websocket") (in-ns 'omn1be.websocket) (start) (in-ns 'omn1be.router)
 
+```
+
 ## Start the frontend<a id="sec-10-2" name="sec-10-2"></a>
 
+```clojure
     cd omn1; lein figwheel
+
+```
 
 Navigate to:
 
@@ -338,7 +375,10 @@ otherwise it is set `false`.
 The first stage to an om next application is to load the Root
 component.  This is dictated by the following line:
 
+```clojure
     (om/add-root! reconciler Login (gdom/getElement "app"))
+
+```
 
 Here the second param, root-class, is set to the `Login` component.
 The third param, `target`, is the div in the `index.html` where to
@@ -351,8 +391,11 @@ application.
 
     Our root component, `Login`, has a query of the form:
     
+    ```clojure
         static om/IQuery
         (query  [_] '[(:user/authenticated {:user/name ?name :user/password ?password})])
+    
+    ```
     
     Basically this says, get the value of `:user/authenticated` supplying
     as parameters to the query the values for the `:user/name` and
@@ -365,15 +408,21 @@ application.
     use in its query for `:user/authenticated`.  We initially set their
     value to be the empty string:
     
+    ```clojure
         static om/IQueryParams
         (params [this]
                 {:name "" :password ""})
+    
+    ```
 
 3.  Component State
 
     In react we can have local state variables.  The code:
     
+    ```clojure
         (initLocalState [this] {:username "fenton" :password "passwErd"})
+    
+    ```
     
     creates two parameters: `:username:` and `:password` and sets their
     initial values.
@@ -382,6 +431,7 @@ application.
     values of these two react state variables to be whatever the user
     types into the name and password input boxes.
     
+    ```clojure
         (input
          #js
          {:name "uname"
@@ -391,6 +441,8 @@ application.
           :onChange (fn [ev]
                       (let [value (.. ev -target -value)]
                         (om/update-state! this assoc :username value)))})
+    
+    ```
 
 4.  Submitting username/password to backend
 
@@ -409,6 +461,7 @@ application.
 We can see everytime a query is run by putting a log statement into
 our reader function.
 
+```clojure
     (defmethod reader :default
       [{st :state :as env} key _]
       (log "default reader" key "env:target" (:target env))
@@ -417,13 +470,18 @@ our reader function.
        :remote false
        })
 
+```
+
 Here we see a log statement at the top of the reader function.  Lets
 see what a dump of the browser console looks like and try to
 understand it.
 
+```clojure
     1  [default reader]: :user/authenticated env:target null
     2  [props]: {:user/authenticated false}
     3  [default reader]: :user/authenticated env:target :remote
+
+```
 
 In line: nil the query of the component is run before the
 component is first loaded.
@@ -434,7 +492,10 @@ is simply the `@app-state`.
 
 This is done with line:
 
+```clojure
     (log "props" (om/props this))
+
+```
 
 In the component rendering.
 
@@ -467,31 +528,41 @@ wire up some basic 'remotes'.
 
 First we must write a function that will be our remote query hook:
 
+```clojure
     (defn my-remoter
       [qry cb]
       (log "remote query" (str qry))
       (cb {:some-param "some value"}))
 
+```
+
 And lets wire this into the reconciler.
 
+```clojure
     (def reconciler
       (om/reconciler
        {:state app-state
         :parser parser
         :send my-remoter}))
 
+```
+
 And finally our reader needs to return `:remote true` for the remote
 to run:
 
+```clojure
     (defmethod reader :default
       [{st :state :as env} key _]
       (log "default reader" key "env:target" (:target env))
       {:value (key (om/db->tree [key] @st @st))
        :remote true})
 
+```
+
 Now lets see what happens as we trace the programs execution with some
 logging statements
 
+```clojure
     1  [default reader]: :some-param env:target null
     2  [props]: {:some-param "not much"}meta
     3  [default reader]: :some-param env:target :remote
@@ -501,6 +572,8 @@ logging statements
     7  [props]: {:some-param "value gotten from remote!"}meta
     8  [app state]: {:some-param "value gotten from remote!"}
     9  [default reader]: :some-param env:target null
+
+```
 
 The first three lines remain unchanged.
 
@@ -551,11 +624,17 @@ with:
 
 IN:
 
+```clojure
     [:some-param]
+
+```
 
 OUT:
 
+```clojure
     {:some-param "Some New Value"}
+
+```
 
 ## My choice of transport<a id="sec-11-2" name="sec-11-2"></a>
 
@@ -604,13 +683,17 @@ Our complete example contains more pieces than what this tutorial is
 aiming to teach about.  Here is a word diagram about the flow and
 architecture of the system:
 
+```clojure
     [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+
+```
 
 Again here we need to be clear of where the handoff occurs from the
 choice of wire or transport architecture occurs and where we enter the
 land of om-next for the backend.  Lets inspect the file layout for the
 project first:
 
+```clojure
     ╭─fenton@ss9 ~/projects ‹system› ‹master*› 
     ╰─➤  cd omn1be
     ╭─fenton@ss9 ~/projects/omn1be ‹system› ‹upper-case› 
@@ -620,6 +703,8 @@ project first:
         |-- core.clj
         |-- router.clj
         `-- websocket.clj
+
+```
 
 The `core.clj` file has all the information about the datomic
 database.  It has the schema, the testdata, etc.  If you need more
@@ -649,8 +734,11 @@ GIT BRANCH: full-working-basic-backend
 
 To fire up the backend you could do:
 
+```clojure
     $ cd omn1be; lein repl
     (load "websocket") (in-ns 'omn1be.websocket) (start) (in-ns 'omn1be.router)
+
+```
 
 Then to test it without our front end, we could use the "Simple
 Websocket Client" chrome extension.
@@ -659,22 +747,31 @@ The websocket URL end point is: `ws://localhost:7890`
 
 Then we can send the following data in it:
 
+```clojure
     [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+
+```
 
 Here is a log of some sent requests and their response from the
 server:
 
+```clojure
     [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
     {:user/authenticated true}
     [(:user/authenticated {:user/name "fenton" :user/password "password"})]
     {:user/authenticated false}
+
+```
 
 ### Backend Parser<a id="sec-11-3-2" name="sec-11-3-2"></a>
 
 So we can see that all we are sending over the wire is an om next
 parameterized query.  
 
+```clojure
     [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+
+```
 
 A good reference for the different types of queries can be found at:
 [Query Syntax Explained](https://anmonteiro.com/2016/01/om-next-query-syntax/).
@@ -687,11 +784,14 @@ end.  Again we will create a reader function and create a parser with
 this reader function.  So we pass from the transport layer, into the
 om-next server layer in this code:
 
+```clojure
     (defn process-data [data]
       (->> data
            read-string
            (router/parser {:database (be/db)})
            prn-str))
+
+```
 
 Particularly when we call the `parser` with the data we recieved.  The
 result of calling the parser is passed back into the transport layer.
