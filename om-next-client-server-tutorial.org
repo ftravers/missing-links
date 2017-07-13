@@ -15,8 +15,7 @@ We'll break down each step of this simple om-next app as it proceeds.
 
 The code is contained in two git repositories:
 
-CLIENT: 
-
+The client code: 
 https://github.com/ftravers/omn1 - "Om Next, 1st tutorial"
 
 server: https://github.com/ftravers/omn1be "Om Next Back End, 1st tutorial"
