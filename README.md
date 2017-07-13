@@ -18,5 +18,5 @@ of the topic.  Without further ado&#x2026;
 
 # Tutorials<a id="sec-2" name="sec-2"></a>
 
-[Beginner Datomic Tutorial](datomic-tutorial.md)
-[Om Next Client/Server Tutorial](om-next-client-server-tutorial.md)
+-   [Beginner Datomic Tutorial](datomic-tutorial.md)
+-   [Om Next Client/Server Tutorial](om-next-client-server-tutorial.md)

@@ -10,8 +10,8 @@ of the topic.  Without further ado...
 
 * Tutorials
 
-[[file:datomic-tutorial.md][Beginner Datomic Tutorial]]
-[[file:om-next-client-server-tutorial.md][Om Next Client/Server Tutorial]]
++ [[file:datomic-tutorial.md][Beginner Datomic Tutorial]]
++ [[file:om-next-client-server-tutorial.md][Om Next Client/Server Tutorial]]
 
 
 
