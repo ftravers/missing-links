@@ -751,7 +751,7 @@ layer to the om-next server is.
 
 Have a look at the
 
-GIT BRANCH: full-working-basic-backend
+*Git Branch*: `full-working-basic-backend`
 
 To fire up the backend you could do:
 
