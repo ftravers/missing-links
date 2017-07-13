@@ -262,35 +262,35 @@ the data.
 *Git Branch*: `add-remote`
 
 ```clojure
-    ;; ...
-    
-    (defn my-reader
-      [env kee parms]
-      (let [st (:state env)]
-        {:value (get @st kee)
-         :remote true                            (ar-reader-remote)
-         }))
-    
-    (defn remote-connection
-      [qry cb]
-      (.log js/console (str (:remote qry)))
-      (cb {:user/authenticated true}))
-    
-    (def reconciler
-      (om/reconciler
-       {:state app-state
-        :parser parser
-        :send remote-connection                  (ar-wire-recon)
-        }))
-    
-    ;; ...
+     1  ;; ...
+     2  
+     3  (defn my-reader
+     4    [env kee parms]
+     5    (let [st (:state env)]
+     6      {:value (get @st kee)
+     7       :remote true
+     8       }))
+     9  
+    10  (defn remote-connection
+    11    [qry cb]
+    12    (.log js/console (str (:remote qry)))
+    13    (cb {:user/authenticated true}))
+    14  
+    15  (def reconciler
+    16    (om/reconciler
+    17     {:state app-state
+    18      :parser parser
+    19      :send remote-connection
+    20      }))
+    21  
+    22  ;; ...
 
 ```
 
-Line ar-reader-remote: Here we return `true` from our reader
+Line 7: Here we return `true` from our reader
 function to trigger the remote call.
 
-Line ar-wire-recon: We must wire up our remote function in the
+Line 19: We must wire up our remote function in the
 `reconciler` with the `:send` keyword parameter.
 
 Now we have added a function that is stubbing out what will eventually

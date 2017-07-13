@@ -208,7 +208,7 @@ the data.
 
 /Git Branch/: ~add-remote~
 
-#+BEGIN_SRC clojure
+#+BEGIN_SRC clojure -r -n
   ;; ...
 
   (defn my-reader
