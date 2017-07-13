@@ -150,26 +150,26 @@ application by wiring it into the `reconciler`.
 *Git Branch*: `add-reader-query-parser`
 
 ```clojure
-    ;; ...
-    (defui SimpleUI
-      static om/IQuery
-      (query [_] [:greeting])
-      ;; ...
-      )
-    ;; ...
-    (defn my-reader
-      [env kee parms]
-      (.log js/console (:target env))
-      {:value "abc"})
-    
-    (def parser
-      (om/parser {:read my-reader}))
-    
-    (def reconciler
-      (om/reconciler
-       {:state app-state
-        :parser parser}))
-    ;; ...
+     1  ;; ...
+     2  (defui SimpleUI
+     3    static om/IQuery
+     4    (query [_] [:greeting])
+     5    ;; ...
+     6    )
+     7  ;; ...
+     8  (defn my-reader
+     9    [env kee parms]
+    10    (.log js/console (:target env))
+    11    {:value "abc"})
+    12  
+    13  (def parser
+    14    (om/parser {:read my-reader}))
+    15  
+    16  (def reconciler
+    17    (om/reconciler
+    18     {:state app-state
+    19      :parser parser}))
+    20  ;; ...
 
 ```
 
@@ -178,12 +178,7 @@ query to the component, a reader function and a parser.
 
 Run the program and inspect the console.  The code:
 
-```clojure
-    (.log js/console (:target env))
-
-```
-
-causes the following output:
+**Line 10**: causes the following output:
 
 ```clojure
     null

@@ -74,19 +74,19 @@ external light weight database.  Parts that are redundant from
 previous examples are elided.
 
 #+BEGIN_SRC clojure -r -n
-  ;; ...
-  (defui SimpleUI
-    Object
-    (render
-     [this]
-     (div nil (:greeting (om/props this))))) (ref:rs-access)
+;; ...
+(defui SimpleUI
+  Object
+  (render
+   [this]
+   (div nil (:greeting (om/props this))))) (ref:rs-access)
 
-  (def app-state (atom {:greeting "Hello World"})) (ref:rs-state)
+(def app-state (atom {:greeting "Hello World"})) (ref:rs-state)
 
-  (def reconciler
-    (om/reconciler
-     {:state app-state})) (ref:rs-wire-state)
-  ;; ...
+(def reconciler
+  (om/reconciler
+   {:state app-state})) (ref:rs-wire-state)
+;; ...
 #+END_SRC
 
 *Line [[(rs-state)]]:* here we create a state atom that holds the state
@@ -101,27 +101,27 @@ application by wiring it into the ~reconciler~.
 
 /Git Branch/: ~add-reader-query-parser~
 
-#+BEGIN_SRC clojure
+#+BEGIN_SRC clojure -r -n
+;; ...
+(defui SimpleUI
+  static om/IQuery
+  (query [_] [:greeting])
   ;; ...
-  (defui SimpleUI
-    static om/IQuery
-    (query [_] [:greeting])
-    ;; ...
-    )
-  ;; ...
-  (defn my-reader
-    [env kee parms]
-    (.log js/console (:target env))
-    {:value "abc"})
+  )
+;; ...
+(defn my-reader
+  [env kee parms]
+  (.log js/console (:target env)) (ref:rqp-logging)
+  {:value "abc"})
 
-  (def parser
-    (om/parser {:read my-reader}))
+(def parser
+  (om/parser {:read my-reader}))
 
-  (def reconciler
-    (om/reconciler
-     {:state app-state
-      :parser parser}))
-  ;; ...
+(def reconciler
+  (om/reconciler
+   {:state app-state
+    :parser parser}))
+;; ...
 #+END_SRC
 
 Now the application looks quite a bit more complicated.  We've added a
@@ -129,11 +129,7 @@ query to the component, a reader function and a parser.
 
 Run the program and inspect the console.  The code:
 
-#+BEGIN_SRC clojure
-  (.log js/console (:target env))
-#+END_SRC
-
-causes the following output:
+*Line [[(rqp-logging)]]*: causes the following output:
 
 #+BEGIN_SRC config
 null
@@ -174,24 +170,24 @@ username/password pair is supplied, be changed to be ~true~.
 /Git Branch/: ~parameterize-query~
 
 #+BEGIN_SRC clojure -n -r
-    (defui SimpleUI
-      static om/IQuery
-      (query [_]
-             '[(:user/authenticated
-                {:user/name ?name
-                 :user/password ?pword})])
+  (defui SimpleUI
+    static om/IQuery
+    (query [_]
+           '[(:user/authenticated
+              {:user/name ?name
+               :user/password ?pword})])
 
-      static om/IQueryParams
-      (params [this]
-              {:name "" :pword ""})
-      ;; ...
-      )
-
-  (defn my-reader
-    [env kee parms]
-    (.log js/console parms) (ref:pq-logging)
+    static om/IQueryParams
+    (params [this]
+            {:name "" :pword ""})
     ;; ...
     )
+
+(defn my-reader
+  [env kee parms]
+  (.log js/console parms) (ref:pq-logging)
+  ;; ...
+  )
 #+END_SRC
 
 The ~IQueryParams~ indicate which parameters are available to this
@@ -207,36 +203,36 @@ the data.
 /Git Branch/: ~add-remote~
 
 #+BEGIN_SRC clojure -r -n
+;; ...
+(defui SimpleUI
+  static om/IQuery
+  (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
+
+  static om/IQueryParams
+  (params [this]
+          {:name "fenton" :pword "passwErd"}) (ref:ar-hard-code)
   ;; ...
-  (defui SimpleUI
-    static om/IQuery
-    (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
+  )
 
-    static om/IQueryParams
-    (params [this]
-            {:name "fenton" :pword "passwErd"}) (ref:ar-hard-code)
-    ;; ...
-    )
+(defn my-reader
+  [env kee parms]
+  (let [st (:state env)]
+    {:value (get @st kee)
+     :remote true (ref:ar-reader-remote)
+     }))
 
-  (defn my-reader
-    [env kee parms]
-    (let [st (:state env)]
-      {:value (get @st kee)
-       :remote true (ref:ar-reader-remote)
-       }))
+(defn remote-connection
+  [qry cb]
+  (.log js/console (str (:remote qry)))
+  (cb {:user/authenticated true}))
 
-  (defn remote-connection
-    [qry cb]
-    (.log js/console (str (:remote qry)))
-    (cb {:user/authenticated true}))
-
-  (def reconciler
-    (om/reconciler
-     {:state app-state
-      :parser parser
-      :send remote-connection (ref:ar-wire-recon)
-      }))
-  ;; ...
+(def reconciler
+  (om/reconciler
+   {:state app-state
+    :parser parser
+    :send remote-connection (ref:ar-wire-recon)
+    }))
+;; ...
 #+END_SRC
 
 *Line [[(ar-reader-remote)]]:* Here we return ~true~ from our reader
@@ -257,9 +253,9 @@ pair.  If you look at the console of the browser then, you'll see the
 following data spit out:
 
 #+BEGIN_SRC clojure
-  [(:user/authenticated
-    {:user/name "fenton"
-     :user/password "passwErd"})]
+[(:user/authenticated
+  {:user/name "fenton"
+   :user/password "passwErd"})]
 #+END_SRC
 
 So this is the data that our client will send to our server.  This is
@@ -280,9 +276,9 @@ Transit with REST might be another good way.
 In our example we are using this data:
 
 #+BEGIN_SRC clojure
-  [(:user/authenticated
-    {:user/name "fenton"
-     :user/password "passwErd"})]
+[(:user/authenticated
+  {:user/name "fenton"
+   :user/password "passwErd"})]
 #+END_SRC
 
 Please keep this front and center in your mind.  Any good integration
@@ -302,9 +298,9 @@ So continuing on with our example, by some mechanism, the piece of
 data:
 
 #+BEGIN_SRC clojure
-  [(:user/authenticated
-    {:user/name "fenton"
-     :user/password "passwErd"})]
+[(:user/authenticated
+  {:user/name "fenton"
+   :user/password "passwErd"})]
 #+END_SRC
 
 is going to arrive.  We will fill in the plumbing between the client
@@ -326,17 +322,17 @@ Checkout the project and branch and launch your REPL.
 Now try some tests in the REPL:
 
 #+BEGIN_SRC clojure
-  omn1be.core> (parser {:state users}
-                       '[(:user/authenticated
-                          {:user/name "fenton"
-                           :user/password "passwerd"})])
-  #:user{:authenticated false}
+omn1be.core> (parser {:state users}
+                     '[(:user/authenticated
+                        {:user/name "fenton"
+                         :user/password "passwerd"})])
+#:user{:authenticated false}
 
-  omn1be.core> (parser {:state users}
-                       '[(:user/authenticated
-                          {:user/name "fenton"
-                           :user/password "passwErd"})])
-  #:user{:authenticated true}
+omn1be.core> (parser {:state users}
+                     '[(:user/authenticated
+                        {:user/name "fenton"
+                         :user/password "passwErd"})])
+#:user{:authenticated true}
 #+END_SRC
 
 Lets quickly look at our reader function, even though it doesn't
@@ -345,18 +341,18 @@ client, and just like the client we simply return a map with the
 answer attached to the ~:value~ key.
 
 #+BEGIN_SRC clojure
-  (defn reader
-    [env kee params]
-    (let [userz (:state env)
-          username (:user/name params)
-          password (:user/password params)]
-      {:value (valid-user userz username password)}))
+(defn reader
+  [env kee params]
+  (let [userz (:state env)
+        username (:user/name params)
+        password (:user/password params)]
+    {:value (valid-user userz username password)}))
 #+END_SRC
 
 And our parser is dead simple:
 
 #+BEGIN_SRC clojure
-  (def parser (om/parser {:read reader}))
+(def parser (om/parser {:read reader}))
 #+END_SRC
 
 Thats all there is to a basic om-next server.
@@ -371,11 +367,11 @@ projects, ~omn1~ and ~omn1be~.
 Start the backend at the command prompt:
 
 #+BEGIN_SRC clojure
-  cd omn1be; lein repl
-  (load "websocket") 
-  (in-ns 'omn1be.websocket)
-  (start)
-  (in-ns 'omn1be.router)
+cd omn1be; lein repl
+(load "websocket") 
+(in-ns 'omn1be.websocket)
+(start)
+(in-ns 'omn1be.router)
 #+END_SRC
 
 ** Start the frontend
@@ -425,12 +421,12 @@ application.
 Our root component, ~Login~, has a query of the form:
 
 #+BEGIN_SRC clojure
-  static om/IQuery
-  (query
-   [_]
-   '[(:user/authenticated
-      {:user/name ?name
-       :user/password ?password})])
+static om/IQuery
+(query
+ [_]
+ '[(:user/authenticated
+    {:user/name ?name
+     :user/password ?password})])
 #+END_SRC
 
 Basically this says, get the value of ~:user/authenticated~ supplying
@@ -445,9 +441,9 @@ use in its query for ~:user/authenticated~.  We initially set their
 value to be the empty string:
 
 #+BEGIN_SRC clojure
-  static om/IQueryParams
-  (params [this]
-          {:name "" :password ""})
+static om/IQueryParams
+(params [this]
+        {:name "" :password ""})
 #+END_SRC
 
 **** Component State
@@ -455,10 +451,10 @@ value to be the empty string:
 In react we can have local state variables.  The code:
 
 #+BEGIN_SRC clojure
-  (initLocalState
-   [this]
-   {:username "fenton"
-    :password "passwErd"})
+(initLocalState
+ [this]
+ {:username "fenton"
+  :password "passwErd"})
 #+END_SRC
 
 creates two parameters: ~:username:~ and ~:password~ and sets their
@@ -469,16 +465,16 @@ values of these two react state variables to be whatever the user
 types into the name and password input boxes.
 
 #+BEGIN_SRC clojure
-  (input
-   #js
-   {:name "uname"
-    :type "text"
-    :placeholder "Enter Username"
-    :required true :value username
-    :onChange
-    (fn [ev]
-      (let [value (.. ev -target -value)]
-        (om/update-state! this assoc :username value)))})
+(input
+ #js
+ {:name "uname"
+  :type "text"
+  :placeholder "Enter Username"
+  :required true :value username
+  :onChange
+  (fn [ev]
+    (let [value (.. ev -target -value)]
+      (om/update-state! this assoc :username value)))})
 #+END_SRC
 
 **** Submitting username/password to backend
@@ -563,10 +559,10 @@ wire up some basic 'remotes'.
 First we must write a function that will be our remote query hook:
 
 #+BEGIN_SRC clojure
-  (defn my-remoter
-    [qry cb]
-    (log "remote query" (str qry))
-    (cb {:some-param "some value"}))
+(defn my-remoter
+  [qry cb]
+  (log "remote query" (str qry))
+  (cb {:some-param "some value"}))
 #+END_SRC
 
 And lets wire this into the reconciler.
@@ -583,11 +579,11 @@ And finally our reader needs to return ~:remote true~ for the remote
 to run:
 
 #+BEGIN_SRC clojure
-  (defmethod reader :default
-    [{st :state :as env} key _]
-    (log "default reader" key "env:target" (:target env))
-    {:value (key (om/db->tree [key] @st @st))
-     :remote true})
+(defmethod reader :default
+  [{st :state :as env} key _]
+  (log "default reader" key "env:target" (:target env))
+  {:value (key (om/db->tree [key] @st @st))
+   :remote true})
 #+END_SRC
 
 Now lets see what happens as we trace the programs execution with some
@@ -656,13 +652,13 @@ with:
 IN:
 
 #+BEGIN_SRC clojure
-  [:some-param]
+[:some-param]
 #+END_SRC
 
 OUT:
 
 #+BEGIN_SRC clojure
-  {:some-param "Some New Value"}
+{:some-param "Some New Value"}
 #+END_SRC
 
 ** My choice of transport
@@ -713,9 +709,9 @@ aiming to teach about.  Here is a word diagram about the flow and
 architecture of the system:
 
 #+BEGIN_SRC clojure
-  [(:user/authenticated
-    {:user/name "fenton"
-     :user/password "passwErd"})]
+[(:user/authenticated
+  {:user/name "fenton"
+   :user/password "passwErd"})]
 #+END_SRC
 
 Again here we need to be clear of where the handoff occurs from the
@@ -763,12 +759,12 @@ Have a look at the
 
 To fire up the backend you could do:
 
-#+BEGIN_SRC clojure 
-  $ cd omn1be; lein repl
-  (load "websocket") 
-  (in-ns 'omn1be.websocket)
-  (start)
-  (in-ns 'omn1be.router)
+#+BEGIN_SRC clojure
+$ cd omn1be; lein repl
+(load "websocket") 
+(in-ns 'omn1be.websocket)
+(start)
+(in-ns 'omn1be.router)
 #+END_SRC
 
 Then to test it without our front end, we could use the "Simple
@@ -779,24 +775,24 @@ The websocket URL end point is: ~ws://localhost:7890~
 Then we can send the following data in it:
 
 #+BEGIN_SRC clojure
-  [(:user/authenticated
-    {:user/name "fenton"
-     :user/password "passwErd"})]
+[(:user/authenticated
+  {:user/name "fenton"
+   :user/password "passwErd"})]
 #+END_SRC
 
 Here is a log of some sent requests and their response from the
 server:
 
 #+BEGIN_SRC clojure
-  [(:user/authenticated
-    {:user/name "fenton"
-     :user/password "passwErd"})]
-  {:user/authenticated true}
+[(:user/authenticated
+  {:user/name "fenton"
+   :user/password "passwErd"})]
+{:user/authenticated true}
 
-  [(:user/authenticated
-    {:user/name "fenton"
-     :user/password "password"})]
-  {:user/authenticated false}
+[(:user/authenticated
+  {:user/name "fenton"
+   :user/password "password"})]
+{:user/authenticated false}
 #+END_SRC
 
 *** Backend Parser 
@@ -805,9 +801,9 @@ So we can see that all we are sending over the wire is an om next
 parameterized query.  
 
 #+BEGIN_SRC clojure
-  [(:user/authenticated
-    {:user/name "fenton"
-     :user/password "passwErd"})]
+[(:user/authenticated
+  {:user/name "fenton"
+   :user/password "passwErd"})]
 #+END_SRC
 
 A good reference for the different types of queries can be found at:
