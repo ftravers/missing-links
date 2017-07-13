@@ -310,7 +310,7 @@ Now we have added a function that is stubbing out what will eventually
 be an actual call to a remote server.  Our `remote-connection`
 function responds with the key `:user/authenticate` to `true`.
 
-Line 9: Finally lets hardcode in a username password
+**Line 9:** Finally lets hardcode in a username password
 pair.  If you look at the console of the browser then, you'll see the
 following data spit out:
 
