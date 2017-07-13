@@ -72,8 +72,9 @@ repositories.  Check that branch out to follow along.
 
 # In the Beginning<a id="sec-3" name="sec-3"></a>
 
-Project: `omn1`
-Git Branch: `in-the-beginning`
+*Git Repository*: `omn1`
+
+*Git Branch*: `in-the-beginning`
 
 Here is a super simple om-next web-app.  All it does is print "Hello
 World".
@@ -117,7 +118,7 @@ form, lets extract it now.
 
 # Remove State from Component<a id="sec-4" name="sec-4"></a>
 
-Git Branch: `remove-state`
+*Git Branch*: `remove-state`
 
 Now we move the data from being hard coded inside the component to an
 external light weight database.
@@ -151,7 +152,7 @@ external light weight database.
 
 # Add Query, Parser, Reader<a id="sec-5" name="sec-5"></a>
 
-Git Branch: `add-reader-query-parser`
+*Git Branch*: `add-reader-query-parser`
 
 Now the application looks quite a bit more complicated.  We've added a
 query to the component, a reader function and a parser.
@@ -202,11 +203,11 @@ Our query parameter is going to be: `:user/authenticated`.  This value
 will initially be `false`, but eventually, when the correct
 username/password pair is supplied, be changed to be `true`.
 
-Git Branch: `parameterize-query`
+*Git Branch*: `parameterize-query`
 
 # Adding in a remote<a id="sec-7" name="sec-7"></a>
 
-Git Branch: `add-remote`
+*Git Branch*: `add-remote`
 
 Now we have added a function that is stubbing out what will eventually
 be an actual call to a remote server.  Our `remote-connection`
@@ -288,7 +289,7 @@ project if you haven't already done so:
 
 Github Project: <https://github.com/ftravers/omn1be>
 
-Git Branch: `step1-backend`
+*Git Branch*: `step1-backend`
 
 Checkout the project and branch and launch your REPL.
 
@@ -532,7 +533,7 @@ called.
 
 Git Repository: <https://github.com/ftravers/omn1>
 
-Branch: simple-remote
+*Git Branch*: `simple-remote`
 
 So we want to send our stuff to a backend server.  Om next creates a
 default hook for this.  So basically what happens again, is that our
