@@ -200,7 +200,7 @@ The ~IQueryParams~ indicate which parameters are available to this
 component and query.  Our ~IQuery~ section has been updated to make
 use of these parameters.
 
-Line [[(pq-logging)]]: We are dumping the ~parms~ parameter of the reader
+Line [[(pq-logging)][abc]] We are dumping the ~parms~ parameter of the reader
 function to the console.  Go inspect the console to see the shape of
 the data.
 

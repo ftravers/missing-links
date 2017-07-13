@@ -253,7 +253,7 @@ The `IQueryParams` indicate which parameters are available to this
 component and query.  Our `IQuery` section has been updated to make
 use of these parameters.
 
-Line 16: We are dumping the `parms` parameter of the reader
+Line abc We are dumping the `parms` parameter of the reader
 function to the console.  Go inspect the console to see the shape of
 the data.
 
