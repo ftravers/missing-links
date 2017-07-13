@@ -47,7 +47,7 @@ World".
   Object
   (render
    [this]
-   (div nil "Hello World"))) (ref:ss-hard-code))
+   (div nil "Hello World"))) (ref:ss-hard-code)
 
 (om/add-root!
  (om/reconciler {}) (ref:ss-recon)
