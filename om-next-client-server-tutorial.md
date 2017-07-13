@@ -223,7 +223,9 @@ Finally lets hardcode in a username password pair.  If you look at the
 console of the browser then, you'll see the following data spit out:
 
 ```clojure
-    [(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+    [(:user/authenticated
+      {:user/name "fenton"
+       :user/password "passwErd"})]
 
 ```
 
@@ -245,7 +247,9 @@ Transit with REST might be another good way.
 In our example we are using this data:
 
 ```clojure
-    [(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+    [(:user/authenticated
+      {:user/name "fenton"
+       :user/password "passwErd"})]
 
 ```
 
@@ -266,7 +270,9 @@ So continuing on with our example, by some mechanism, the piece of
 data:
 
 ```clojure
-    [(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+    [(:user/authenticated
+      {:user/name "fenton"
+       :user/password "passwErd"})]
 
 ```
 
@@ -338,7 +344,10 @@ Start the backend at the command prompt:
 
 ```clojure
     cd omn1be; lein repl
-    (load "websocket") (in-ns 'omn1be.websocket) (start) (in-ns 'omn1be.router)
+    (load "websocket") 
+    (in-ns 'omn1be.websocket)
+    (start)
+    (in-ns 'omn1be.router)
 
 ```
 
@@ -393,7 +402,11 @@ application.
     
     ```clojure
         static om/IQuery
-        (query  [_] '[(:user/authenticated {:user/name ?name :user/password ?password})])
+        (query
+         [_]
+         '[(:user/authenticated
+            {:user/name ?name
+             :user/password ?password})])
     
     ```
     
@@ -420,7 +433,10 @@ application.
     In react we can have local state variables.  The code:
     
     ```clojure
-        (initLocalState [this] {:username "fenton" :password "passwErd"})
+        (initLocalState
+         [this]
+         {:username "fenton"
+          :password "passwErd"})
     
     ```
     
@@ -438,9 +454,10 @@ application.
           :type "text"
           :placeholder "Enter Username"
           :required true :value username
-          :onChange (fn [ev]
-                      (let [value (.. ev -target -value)]
-                        (om/update-state! this assoc :username value)))})
+          :onChange
+          (fn [ev]
+            (let [value (.. ev -target -value)]
+              (om/update-state! this assoc :username value)))})
     
     ```
 
@@ -684,7 +701,9 @@ aiming to teach about.  Here is a word diagram about the flow and
 architecture of the system:
 
 ```clojure
-    [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+    [(:user/authenticated
+      {:user/name "fenton"
+       :user/password "passwErd"})]
 
 ```
 
@@ -748,7 +767,9 @@ The websocket URL end point is: `ws://localhost:7890`
 Then we can send the following data in it:
 
 ```clojure
-    [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+    [(:user/authenticated
+      {:user/name "fenton"
+       :user/password "passwErd"})]
 
 ```
 
@@ -756,9 +777,14 @@ Here is a log of some sent requests and their response from the
 server:
 
 ```clojure
-    [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+    [(:user/authenticated
+      {:user/name "fenton"
+       :user/password "passwErd"})]
     {:user/authenticated true}
-    [(:user/authenticated {:user/name "fenton" :user/password "password"})]
+    
+    [(:user/authenticated
+      {:user/name "fenton"
+       :user/password "password"})]
     {:user/authenticated false}
 
 ```
@@ -769,7 +795,9 @@ So we can see that all we are sending over the wire is an om next
 parameterized query.  
 
 ```clojure
-    [(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+    [(:user/authenticated
+      {:user/name "fenton"
+       :user/password "passwErd"})]
 
 ```
 

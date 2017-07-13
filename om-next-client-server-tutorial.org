@@ -172,7 +172,9 @@ Finally lets hardcode in a username password pair.  If you look at the
 console of the browser then, you'll see the following data spit out:
 
 #+BEGIN_SRC clojure
-[(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+  [(:user/authenticated
+    {:user/name "fenton"
+     :user/password "passwErd"})]
 #+END_SRC
 
 So this is the data that our client will send to our server.  This is
@@ -193,7 +195,9 @@ Transit with REST might be another good way.
 In our example we are using this data:
 
 #+BEGIN_SRC clojure
-[(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+  [(:user/authenticated
+    {:user/name "fenton"
+     :user/password "passwErd"})]
 #+END_SRC
 
 Please keep this front and center in your mind.  Any good integration
@@ -213,7 +217,9 @@ So continuing on with our example, by some mechanism, the piece of
 data:
 
 #+BEGIN_SRC clojure
-[(:user/authenticated {:user/name "fenton", :user/password "passwErd"})]
+  [(:user/authenticated
+    {:user/name "fenton"
+     :user/password "passwErd"})]
 #+END_SRC
 
 is going to arrive.  We will fill in the plumbing between the client
@@ -279,9 +285,12 @@ projects, ~omn1~ and ~omn1be~.
 
 Start the backend at the command prompt:
 
-#+BEGIN_SRC 
-cd omn1be; lein repl
-(load "websocket") (in-ns 'omn1be.websocket) (start) (in-ns 'omn1be.router)
+#+BEGIN_SRC clojure
+  cd omn1be; lein repl
+  (load "websocket") 
+  (in-ns 'omn1be.websocket)
+  (start)
+  (in-ns 'omn1be.router)
 #+END_SRC
 
 ** Start the frontend
@@ -332,7 +341,11 @@ Our root component, ~Login~, has a query of the form:
 
 #+BEGIN_SRC clojure
   static om/IQuery
-  (query  [_] '[(:user/authenticated {:user/name ?name :user/password ?password})])
+  (query
+   [_]
+   '[(:user/authenticated
+      {:user/name ?name
+       :user/password ?password})])
 #+END_SRC
 
 Basically this says, get the value of ~:user/authenticated~ supplying
@@ -357,7 +370,10 @@ value to be the empty string:
 In react we can have local state variables.  The code:
 
 #+BEGIN_SRC clojure
-  (initLocalState [this] {:username "fenton" :password "passwErd"})
+  (initLocalState
+   [this]
+   {:username "fenton"
+    :password "passwErd"})
 #+END_SRC
 
 creates two parameters: ~:username:~ and ~:password~ and sets their
@@ -374,9 +390,10 @@ types into the name and password input boxes.
     :type "text"
     :placeholder "Enter Username"
     :required true :value username
-    :onChange (fn [ev]
-                (let [value (.. ev -target -value)]
-                  (om/update-state! this assoc :username value)))})
+    :onChange
+    (fn [ev]
+      (let [value (.. ev -target -value)]
+        (om/update-state! this assoc :username value)))})
 #+END_SRC
 
 **** Submitting username/password to backend
@@ -609,7 +626,9 @@ aiming to teach about.  Here is a word diagram about the flow and
 architecture of the system:
 
 #+BEGIN_SRC clojure
-[(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+  [(:user/authenticated
+    {:user/name "fenton"
+     :user/password "passwErd"})]
 #+END_SRC
 
 Again here we need to be clear of where the handoff occurs from the
@@ -670,17 +689,24 @@ The websocket URL end point is: ~ws://localhost:7890~
 Then we can send the following data in it:
 
 #+BEGIN_SRC clojure
-[(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+  [(:user/authenticated
+    {:user/name "fenton"
+     :user/password "passwErd"})]
 #+END_SRC
 
 Here is a log of some sent requests and their response from the
 server:
 
 #+BEGIN_SRC clojure
-[(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
-{:user/authenticated true}
-[(:user/authenticated {:user/name "fenton" :user/password "password"})]
-{:user/authenticated false}
+  [(:user/authenticated
+    {:user/name "fenton"
+     :user/password "passwErd"})]
+  {:user/authenticated true}
+
+  [(:user/authenticated
+    {:user/name "fenton"
+     :user/password "password"})]
+  {:user/authenticated false}
 #+END_SRC
 
 *** Backend Parser 
@@ -689,7 +715,9 @@ So we can see that all we are sending over the wire is an om next
 parameterized query.  
 
 #+BEGIN_SRC clojure
-[(:user/authenticated {:user/name "fenton" :user/password "passwErd"})]
+  [(:user/authenticated
+    {:user/name "fenton"
+     :user/password "passwErd"})]
 #+END_SRC
 
 A good reference for the different types of queries can be found at:
