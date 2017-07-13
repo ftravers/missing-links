@@ -368,7 +368,7 @@ In om-next, it is the job of the *Parser*, to figure out what to do
 with both queries and mutations.  Checkout the following github
 project if you haven't already done so:
 
-Github Project: <https://github.com/ftravers/omn1be>
+*Github Repository*: <https://github.com/ftravers/omn1be>
 
 *Git Branch*: `step1-backend`
 
@@ -612,7 +612,7 @@ called.
 
 ### Adding in a fake remote<a id="sec-11-1-3" name="sec-11-1-3"></a>
 
-Git Repository: <https://github.com/ftravers/omn1>
+*Git Repository*: <https://github.com/ftravers/omn1>
 
 *Git Branch*: `simple-remote`
 
