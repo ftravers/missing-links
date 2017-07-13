@@ -530,8 +530,9 @@ called.
 
 ### Adding in a fake remote<a id="sec-11-1-3" name="sec-11-1-3"></a>
 
-GIT REPO: <https://github.com/ftravers/omn1>
-BRANCH: simple-remote
+Git Repository: <https://github.com/ftravers/omn1>
+
+Branch: simple-remote
 
 So we want to send our stuff to a backend server.  Om next creates a
 default hook for this.  So basically what happens again, is that our
@@ -594,9 +595,10 @@ logging statements
 
 The first three lines remain unchanged.
 
-On line: 4, we see we've entered into the hook for the
-remote function.  We dump the `@app-state` on line:
-5, before we call the callback, `cb`, with our
+Line 4: we see we've entered into the hook for the
+remote function.  We dump the `@app-state`
+
+Line 5: before we call the callback, `cb`, with our
 new data, which should merge the data into our `@app-state` map.  The
 callback is called and we can see that the `@app-state` is updated and
 the component is re-rendered.
