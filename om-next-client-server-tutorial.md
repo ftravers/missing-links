@@ -64,11 +64,11 @@ The code is contained in two git repositories:
 The client code: 
 <https://github.com/ftravers/omn1> 
 
-omn1 stands for: "Om Next, 1st tutorial"
+`omn1` stands for: "Om Next, 1st tutorial"
 
 The server code: <https://github.com/ftravers/omn1be> 
 
-omn1be stands for: "Om Next Back End, 1st tutorial"
+`omn1be` stands for: "Om Next Back End, 1st tutorial"
 
 Throughout the tutorial we'll reference branches in these
 repositories.  Check that branch out to follow along.
