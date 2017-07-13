@@ -264,48 +264,55 @@ the data.
 ```clojure
      1  ;; ...
      2  
-     3  (defn my-reader
-     4    [env kee parms]
-     5    (let [st (:state env)]
-     6      {:value (get @st kee)
-     7       :remote true
-     8       }))
-     9  
-    10  (defn remote-connection
-    11    [qry cb]
-    12    (.log js/console (str (:remote qry)))
-    13    (cb {:user/authenticated true}))
-    14  
-    15  (def reconciler
-    16    (om/reconciler
-    17     {:state app-state
-    18      :parser parser
-    19      :send remote-connection
-    20      }))
-    21  
-    22  ;; ...
+     3  (defui SimpleUI
+     4    static om/IQuery
+     5    (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
+     6  
+     7    static om/IQueryParams
+     8    (params [this]
+     9            {:name "fenton" :pword "passwErd"})
+    10    ;; ...
+    11    )
+    12  
+    13  (defn my-reader
+    14    [env kee parms]
+    15    (let [st (:state env)]
+    16      {:value (get @st kee)
+    17       :remote true
+    18       }))
+    19  
+    20  (defn remote-connection
+    21    [qry cb]
+    22    (.log js/console (str (:remote qry)))
+    23    (cb {:user/authenticated true}))
+    24  
+    25  (def reconciler
+    26    (om/reconciler
+    27     {:state app-state
+    28      :parser parser
+    29      :send remote-connection
+    30      }))
+    31  
+    32  ;; ...
 
 ```
 
-Line 7: Here we return `true` from our reader
-function to trigger the remote call.
+Line 17: Here we return `true` from our reader
+function to trigger the remote call.  Here we return the name of the
+remote as the key, `:remote`, and set it's value to `true`.  Om-next
+gives us this remote by default.  We could add other remotes if we
+wanted to.
 
-Line 19: We must wire up our remote function in the
+Line 29: We must wire up our remote function in the
 `reconciler` with the `:send` keyword parameter.
 
 Now we have added a function that is stubbing out what will eventually
 be an actual call to a remote server.  Our `remote-connection`
 function responds with the key `:user/authenticate` to `true`.
 
-When we want to trigger a remote read we add a key to the map returned
-by a reader that is the name of the remote, in our case the default
-om-next remote `:remote`, and set it's value to be true.
-
-We also wire it up in the reconciler by passing the function to the
-`:send` keyword of the reconciler constructor map.
-
-Finally lets hardcode in a username password pair.  If you look at the
-console of the browser then, you'll see the following data spit out:
+Line 9: Finally lets hardcode in a username password
+pair.  If you look at the console of the browser then, you'll see the
+following data spit out:
 
 ```clojure
     [(:user/authenticated

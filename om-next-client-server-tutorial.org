@@ -211,6 +211,16 @@ the data.
 #+BEGIN_SRC clojure -r -n
   ;; ...
 
+  (defui SimpleUI
+    static om/IQuery
+    (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
+
+    static om/IQueryParams
+    (params [this]
+            {:name "fenton" :pword "passwErd"}) (ref:ar-hard-code)
+    ;; ...
+    )
+
   (defn my-reader
     [env kee parms]
     (let [st (:state env)]
@@ -234,7 +244,10 @@ the data.
 #+END_SRC
 
 Line [[(ar-reader-remote)]]: Here we return ~true~ from our reader
-function to trigger the remote call.
+function to trigger the remote call.  Here we return the name of the
+remote as the key, ~:remote~, and set it's value to ~true~.  Om-next
+gives us this remote by default.  We could add other remotes if we
+wanted to.
 
 Line [[(ar-wire-recon)]]: We must wire up our remote function in the
 ~reconciler~ with the ~:send~ keyword parameter.
@@ -243,15 +256,9 @@ Now we have added a function that is stubbing out what will eventually
 be an actual call to a remote server.  Our ~remote-connection~
 function responds with the key ~:user/authenticate~ to ~true~.
 
-When we want to trigger a remote read we add a key to the map returned
-by a reader that is the name of the remote, in our case the default
-om-next remote ~:remote~, and set it's value to be true.
-
-We also wire it up in the reconciler by passing the function to the
-~:send~ keyword of the reconciler constructor map.
-
-Finally lets hardcode in a username password pair.  If you look at the
-console of the browser then, you'll see the following data spit out:
+Line [[(ar-hard-code)]]: Finally lets hardcode in a username password
+pair.  If you look at the console of the browser then, you'll see the
+following data spit out:
 
 #+BEGIN_SRC clojure
   [(:user/authenticated
