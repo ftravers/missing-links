@@ -210,7 +210,7 @@ is set to whatever the value for the passed in `kee` is.
 As you can see `{:greeting "abc"}` gets printed out on the webpage.
 
 So we have a lot of ceremony already, and it is a bit hard to percieve
-of the benefits of this approach at this point.  Unfortunately, we'll
+the benefits of this approach at this point.  Unfortunately, we'll
 just need to chug through this and hopefully in the end you can start
 to appreciate the benefits.
 
