@@ -397,19 +397,22 @@ Now try some tests in the REPL:
 ```
 
 Lets quickly look at our reader function, even though it doesn't
-present any new ideas.  The input params are the same as on the
-client, and just like the client we simply return a map with the
-answer attached to the `:value` key.
+present any new ideas.  
 
 ```clojure
-    (defn reader
-      [env kee params]
-      (let [userz (:state env)
-            username (:user/name params)
-            password (:user/password params)]
-        {:value (valid-user userz username password)}))
+    1  (defn reader
+    2    [env kee params]
+    3    (let [userz (:state env)
+    4          username (:user/name params)
+    5          password (:user/password params)]
+    6      {:value (valid-user userz username password)}
+    7      ))
 
 ```
+
+The input params are the same as on the client, and just like the
+client we simply return a map with the answer attached to the `:value`
+key.
 
 And our parser is dead simple:
 
