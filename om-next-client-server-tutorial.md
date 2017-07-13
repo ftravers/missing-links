@@ -126,7 +126,6 @@ previous examples are elided.
 
 ```clojure
     ;; ...
-    
     (defui SimpleUI
       Object
       (render
@@ -139,7 +138,6 @@ previous examples are elided.
     (def reconciler
       (om/reconciler
        {:state app-state}))
-    
     ;; ...
 
 ```
@@ -153,12 +151,9 @@ previous examples are elided.
     (defui SimpleUI
       static om/IQuery
       (query [_] [:greeting])
-    
       ;; ...
       )
-    
     ;; ...
-    
     (defn my-reader
       [env kee parms]
       (.log js/console (:target env))
@@ -171,7 +166,6 @@ previous examples are elided.
       (om/reconciler
        {:state app-state
         :parser parser}))
-    
     ;; ...
 
 ```
@@ -263,54 +257,52 @@ the data.
 
 ```clojure
      1  ;; ...
-     2  
-     3  (defui SimpleUI
-     4    static om/IQuery
-     5    (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
-     6  
-     7    static om/IQueryParams
-     8    (params [this]
-     9            {:name "fenton" :pword "passwErd"})
-    10    ;; ...
-    11    )
-    12  
-    13  (defn my-reader
-    14    [env kee parms]
-    15    (let [st (:state env)]
-    16      {:value (get @st kee)
-    17       :remote true
-    18       }))
-    19  
-    20  (defn remote-connection
-    21    [qry cb]
-    22    (.log js/console (str (:remote qry)))
-    23    (cb {:user/authenticated true}))
-    24  
-    25  (def reconciler
-    26    (om/reconciler
-    27     {:state app-state
-    28      :parser parser
-    29      :send remote-connection
-    30      }))
-    31  
-    32  ;; ...
+     2  (defui SimpleUI
+     3    static om/IQuery
+     4    (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
+     5  
+     6    static om/IQueryParams
+     7    (params [this]
+     8            {:name "fenton" :pword "passwErd"})
+     9    ;; ...
+    10    )
+    11  
+    12  (defn my-reader
+    13    [env kee parms]
+    14    (let [st (:state env)]
+    15      {:value (get @st kee)
+    16       :remote true
+    17       }))
+    18  
+    19  (defn remote-connection
+    20    [qry cb]
+    21    (.log js/console (str (:remote qry)))
+    22    (cb {:user/authenticated true}))
+    23  
+    24  (def reconciler
+    25    (om/reconciler
+    26     {:state app-state
+    27      :parser parser
+    28      :send remote-connection
+    29      }))
+    30  ;; ...
 
 ```
 
-**Line 17:** Here we return `true` from our reader
+**Line 16:** Here we return `true` from our reader
 function to trigger the remote call.  Here we return the name of the
 remote as the key, `:remote`, and set it's value to `true`.  Om-next
 gives us this remote by default.  We could add other remotes if we
 wanted to.
 
-**Line 29:** We must wire up our remote function in the
+**Line 28:** We must wire up our remote function in the
 `reconciler` with the `:send` keyword parameter.
 
 Now we have added a function that is stubbing out what will eventually
 be an actual call to a remote server.  Our `remote-connection`
 function responds with the key `:user/authenticate` to `true`.
 
-**Line 9:** Finally lets hardcode in a username password
+**Line 8:** Finally lets hardcode in a username password
 pair.  If you look at the console of the browser then, you'll see the
 following data spit out:
 
