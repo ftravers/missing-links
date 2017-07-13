@@ -78,6 +78,7 @@ Git Branch: `in-the-beginning`
 Here is a super simple om-next web-app.  All it does is print "Hello
 World".
 
+```clojure
     (ns omn1.webpage
       (:require
        [om.next :as om :refer-macros [defui]]
@@ -94,6 +95,7 @@ World".
      (om/reconciler {})
      SimpleUI
      (gdom/getElement "app"))
+```
 
 The line:
 
