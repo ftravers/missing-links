@@ -83,33 +83,26 @@ Here is a super simple om-next web-app.  All it does is print "Hello
 World".
 
 ```clojure
-    (ns omn1.webpage
-      (:require
-       [om.next :as om :refer-macros [defui]]
-       [om.dom :as dom :refer [div]]
-       [goog.dom :as gdom]))
-    
-    (defui SimpleUI
-      Object
-      (render
-       [this]
-       (div nil "Hello World")))
-    
-    (om/add-root!
-     (om/reconciler {})
-     SimpleUI
-     (gdom/getElement "app"))
+     1  (ns omn1.webpage
+     2    (:require
+     3     [om.next :as om :refer-macros [defui]]
+     4     [om.dom :as dom :refer [div]]
+     5     [goog.dom :as gdom]))
+     6  
+     7  (defui SimpleUI
+     8    Object
+     9    (render
+    10     [this]
+    11     (div nil "Hello World")))
+    12  
+    13  (om/add-root!
+    14   (om/reconciler {})
+    15   SimpleUI
+    16   (gdom/getElement "app"))
 
 ```
 
-The line:
-
-```clojure
-    (om/reconciler {})
-
-```
-
-is a bit redundant in this example, but its a required argument to the
+**Line 14:** is a bit redundant in this example, but its a required argument to the
 `add-root!` function, so we include it.  It doesn't do anything at
 this point, but later on we'll see what it does.
 

@@ -36,7 +36,7 @@ repositories.  Check that branch out to follow along.
 Here is a super simple om-next web-app.  All it does is print "Hello
 World".
 
-#+BEGIN_SRC clojure
+#+BEGIN_SRC clojure -r -n
 (ns omn1.webpage
   (:require
    [om.next :as om :refer-macros [defui]]
@@ -50,18 +50,12 @@ World".
    (div nil "Hello World")))
 
 (om/add-root!
- (om/reconciler {})
+ (om/reconciler {}) (ref:ss-recon)
  SimpleUI
  (gdom/getElement "app"))
 #+END_SRC
 
-The line:
-
-#+BEGIN_SRC clojure
- (om/reconciler {})
-#+END_SRC
-
-is a bit redundant in this example, but its a required argument to the
+*Line [[(ss-recon)]]:* is a bit redundant in this example, but its a required argument to the
 ~add-root!~ function, so we include it.  It doesn't do anything at
 this point, but later on we'll see what it does.
 
