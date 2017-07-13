@@ -121,22 +121,29 @@ external light weight database.  Parts that are redundant from
 previous examples are elided.
 
 ```clojure
-    ;; ...
-    (defui SimpleUI
-      Object
-      (render
-       [this]
-       (div nil (:greeting (om/props this)))))
-    
-    (def app-state
-      (atom {:greeting "Hello World"}))
-    
-    (def reconciler
-      (om/reconciler
-       {:state app-state}))
-    ;; ...
+     1  ;; ...
+     2  (defui SimpleUI
+     3    Object
+     4    (render
+     5     [this]
+     6     (div nil (:greeting (om/props this)))))
+     7  
+     8  (def app-state (atom {:greeting "Hello World"}))
+     9  
+    10  (def reconciler
+    11    (om/reconciler
+    12     {:state app-state}))
+    13  ;; ...
 
 ```
+
+**Line 8:** here we create a state atom that holds the state
+for the application.
+
+**Line 12:** here we add the state atom into the
+application by wiring it into the `reconciler`.
+
+**Line 6:** finally, we access the state in the `root` component.
 
 # Add Query, Parser, Reader<a id="sec-5" name="sec-5"></a>
 

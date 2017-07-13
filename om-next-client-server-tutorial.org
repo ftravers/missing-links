@@ -73,22 +73,29 @@ Now we move the data from being hard coded inside the component to an
 external light weight database.  Parts that are redundant from
 previous examples are elided.
 
-#+BEGIN_SRC clojure
+#+BEGIN_SRC clojure -r -n
   ;; ...
   (defui SimpleUI
     Object
     (render
      [this]
-     (div nil (:greeting (om/props this)))))
+     (div nil (:greeting (om/props this))))) (ref:rs-access)
 
-  (def app-state
-    (atom {:greeting "Hello World"}))
+  (def app-state (atom {:greeting "Hello World"})) (ref:rs-state)
 
   (def reconciler
     (om/reconciler
-     {:state app-state}))
+     {:state app-state})) (ref:rs-wire-state)
   ;; ...
 #+END_SRC
+
+*Line [[(rs-state)]]:* here we create a state atom that holds the state
+for the application.
+
+*Line [[(rs-wire-state)]]:* here we add the state atom into the
+application by wiring it into the ~reconciler~.
+
+*Line [[(rs-access)]]:* finally, we access the state in the ~root~ component.
 
 * Add Query, Parser, Reader
 
