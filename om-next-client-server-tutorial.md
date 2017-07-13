@@ -221,11 +221,28 @@ password to a backend database, and if the username/password pair
 matches what is in the database, then we display a "login successful"
 page. 
 
-Our query parameter is going to be: `:user/authenticated`.  This value
-will initially be `false`, but eventually, when the correct
+Our query is going to be: `:user/authenticated`.  This value will
+initially be `false`, but eventually, when the correct
 username/password pair is supplied, be changed to be `true`.
 
 *Git Branch*: `parameterize-query`
+
+```clojure
+    (defui SimpleUI
+      static om/IQuery
+      (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
+    
+      static om/IQueryParams
+      (params [this]
+              {:name "" :pword ""})
+      ;; ...
+      )
+
+```
+
+The `IQueryParams` indicate which parameters are available to this
+component and query.  Our `IQuery` section has been updated to make
+use of these parameters.
 
 # Adding in a remote<a id="sec-7" name="sec-7"></a>
 
