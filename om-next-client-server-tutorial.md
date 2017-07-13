@@ -228,21 +228,34 @@ username/password pair is supplied, be changed to be `true`.
 *Git Branch*: `parameterize-query`
 
 ```clojure
-    (defui SimpleUI
-      static om/IQuery
-      (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
-    
-      static om/IQueryParams
-      (params [this]
-              {:name "" :pword ""})
-      ;; ...
-      )
+     1    (defui SimpleUI
+     2      static om/IQuery
+     3      (query [_]
+     4             '[(:user/authenticated
+     5                {:user/name ?name
+     6                 :user/password ?pword})])
+     7  
+     8      static om/IQueryParams
+     9      (params [this]
+    10              {:name "" :pword ""})
+    11      ;; ...
+    12      )
+    13  
+    14  (defn my-reader
+    15    [env kee parms]
+    16    (.log js/console parms)
+    17    ;; ...
+    18    )
 
 ```
 
 The `IQueryParams` indicate which parameters are available to this
 component and query.  Our `IQuery` section has been updated to make
 use of these parameters.
+
+Line nil: We are dumping the `parms` parameter of the reader
+function to the console.  Go inspect the console to see the shape of
+the data.
 
 # Adding in a remote<a id="sec-7" name="sec-7"></a>
 
@@ -540,10 +553,10 @@ understand it.
 
 ```
 
-In line: nil the query of the component is run before the
+In line nil: the query of the component is run before the
 component is first loaded.
 
-In line: 2, as the component is rendered we dump the react
+In line 2: as the component is rendered we dump the react
 properties that have been passed into the component, in this case it
 is simply the `@app-state`.
 

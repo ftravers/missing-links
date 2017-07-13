@@ -175,14 +175,23 @@ username/password pair is supplied, be changed to be ~true~.
 
 /Git Branch/: ~parameterize-query~
 
-#+BEGIN_SRC clojure
-  (defui SimpleUI
-    static om/IQuery
-    (query [_] '[(:user/authenticated {:user/name ?name :user/password ?pword})])
+#+BEGIN_SRC clojure -n -r
+    (defui SimpleUI
+      static om/IQuery
+      (query [_]
+             '[(:user/authenticated
+                {:user/name ?name
+                 :user/password ?pword})])
 
-    static om/IQueryParams
-    (params [this]
-            {:name "" :pword ""})
+      static om/IQueryParams
+      (params [this]
+              {:name "" :pword ""})
+      ;; ...
+      )
+
+  (defn my-reader
+    [env kee parms]
+    (.log js/console parms) (ref:pq-logging)
     ;; ...
     )
 #+END_SRC
@@ -190,6 +199,11 @@ username/password pair is supplied, be changed to be ~true~.
 The ~IQueryParams~ indicate which parameters are available to this
 component and query.  Our ~IQuery~ section has been updated to make
 use of these parameters.
+
+Line [[(pq-loggin)]]: We are dumping the ~parms~ parameter of the reader
+function to the console.  Go inspect the console to see the shape of
+the data.
+
 * Adding in a remote
 
 /Git Branch/: ~add-remote~
@@ -470,10 +484,10 @@ understand it.
 [default reader]: :user/authenticated env:target :remote (ref:remote)
 #+END_SRC
 
-In line: [[(load-comp)]] the query of the component is run before the
+In line [[(load-comp)]]: the query of the component is run before the
 component is first loaded.
 
-In line: [[(load-comp2)]], as the component is rendered we dump the react
+In line [[(load-comp2)]]: as the component is rendered we dump the react
 properties that have been passed into the component, in this case it
 is simply the ~@app-state~.
 
