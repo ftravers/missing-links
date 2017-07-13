@@ -758,7 +758,10 @@ To fire up the backend you could do:
 
 ```clojure
     $ cd omn1be; lein repl
-    (load "websocket") (in-ns 'omn1be.websocket) (start) (in-ns 'omn1be.router)
+    (load "websocket") 
+    (in-ns 'omn1be.websocket)
+    (start)
+    (in-ns 'omn1be.router)
 
 ```
 

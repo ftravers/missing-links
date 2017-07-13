@@ -679,9 +679,12 @@ Have a look at the
 
 To fire up the backend you could do:
 
-#+BEGIN_SRC 
-$ cd omn1be; lein repl
-(load "websocket") (in-ns 'omn1be.websocket) (start) (in-ns 'omn1be.router)
+#+BEGIN_SRC clojure 
+  $ cd omn1be; lein repl
+  (load "websocket") 
+  (in-ns 'omn1be.websocket)
+  (start)
+  (in-ns 'omn1be.router)
 #+END_SRC
 
 Then to test it without our front end, we could use the "Simple
