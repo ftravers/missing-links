@@ -48,7 +48,7 @@
 # Overview<a id="sec-1" name="sec-1"></a>
 
 This tutorial will try to explain how to make the simplest
-client/server app using om-next and a simple backend respectively.
+client/server app using om-next and a simple backend.
 
 We'll start the tutorial with building a simple login page.  The user
 is prompted for a username and a password, and when they supply the
@@ -61,7 +61,9 @@ We'll break down each step of this simple om-next app as it proceeds.
 
 The code is contained in two git repositories:
 
-client: <https://github.com/ftravers/omn1> "Om Next, 1st tutorial"
+CLIENT: 
+
+<https://github.com/ftravers/omn1> - "Om Next, 1st tutorial"
 
 server: <https://github.com/ftravers/omn1be> "Om Next Back End, 1st tutorial"
 
