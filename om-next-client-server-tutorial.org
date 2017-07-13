@@ -200,7 +200,7 @@ The ~IQueryParams~ indicate which parameters are available to this
 component and query.  Our ~IQuery~ section has been updated to make
 use of these parameters.
 
-Line [[(pq-logging)]] We are dumping the ~parms~ parameter of the reader
+*Line [[(pq-logging)]]:* We are dumping the ~parms~ parameter of the reader
 function to the console.  Go inspect the console to see the shape of
 the data.
 
@@ -243,13 +243,13 @@ the data.
   ;; ...
 #+END_SRC
 
-Line [[(ar-reader-remote)]]: Here we return ~true~ from our reader
+*Line [[(ar-reader-remote)]]:* Here we return ~true~ from our reader
 function to trigger the remote call.  Here we return the name of the
 remote as the key, ~:remote~, and set it's value to ~true~.  Om-next
 gives us this remote by default.  We could add other remotes if we
 wanted to.
 
-Line [[(ar-wire-recon)]]: We must wire up our remote function in the
+*Line [[(ar-wire-recon)]]:* We must wire up our remote function in the
 ~reconciler~ with the ~:send~ keyword parameter.
 
 Now we have added a function that is stubbing out what will eventually
@@ -611,10 +611,10 @@ logging statements
 
 The first three lines remain unchanged.
 
-Line [[(remote-query)]]: we see we've entered into the hook for the
+*Line [[(remote-query)]]:* we see we've entered into the hook for the
 remote function.  We dump the ~@app-state~
 
-Line [[(app-state-before-remote)]]: before we call the callback, ~cb~, with our
+*Line [[(app-state-before-remote)]]:* before we call the callback, ~cb~, with our
 new data, which should merge the data into our ~@app-state~ map.  The
 callback is called and we can see that the ~@app-state~ is updated and
 the component is re-rendered.

@@ -253,7 +253,7 @@ The `IQueryParams` indicate which parameters are available to this
 component and query.  Our `IQuery` section has been updated to make
 use of these parameters.
 
-Line 16 We are dumping the `parms` parameter of the reader
+**Line 16:** We are dumping the `parms` parameter of the reader
 function to the console.  Go inspect the console to see the shape of
 the data.
 
@@ -297,13 +297,13 @@ the data.
 
 ```
 
-Line 17: Here we return `true` from our reader
+**Line 17:** Here we return `true` from our reader
 function to trigger the remote call.  Here we return the name of the
 remote as the key, `:remote`, and set it's value to `true`.  Om-next
 gives us this remote by default.  We could add other remotes if we
 wanted to.
 
-Line 29: We must wire up our remote function in the
+**Line 29:** We must wire up our remote function in the
 `reconciler` with the `:send` keyword parameter.
 
 Now we have added a function that is stubbing out what will eventually
@@ -687,10 +687,10 @@ logging statements
 
 The first three lines remain unchanged.
 
-Line 4: we see we've entered into the hook for the
+**Line 4:** we see we've entered into the hook for the
 remote function.  We dump the `@app-state`
 
-Line 5: before we call the callback, `cb`, with our
+**Line 5:** before we call the callback, `cb`, with our
 new data, which should merge the data into our `@app-state` map.  The
 callback is called and we can see that the `@app-state` is updated and
 the component is re-rendered.
