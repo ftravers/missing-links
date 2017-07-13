@@ -253,13 +253,45 @@ The `IQueryParams` indicate which parameters are available to this
 component and query.  Our `IQuery` section has been updated to make
 use of these parameters.
 
-Line abc We are dumping the `parms` parameter of the reader
+Line 16 We are dumping the `parms` parameter of the reader
 function to the console.  Go inspect the console to see the shape of
 the data.
 
 # Adding in a remote<a id="sec-7" name="sec-7"></a>
 
 *Git Branch*: `add-remote`
+
+```clojure
+    ;; ...
+    
+    (defn my-reader
+      [env kee parms]
+      (let [st (:state env)]
+        {:value (get @st kee)
+         :remote true                            (ar-reader-remote)
+         }))
+    
+    (defn remote-connection
+      [qry cb]
+      (.log js/console (str (:remote qry)))
+      (cb {:user/authenticated true}))
+    
+    (def reconciler
+      (om/reconciler
+       {:state app-state
+        :parser parser
+        :send remote-connection                  (ar-wire-recon)
+        }))
+    
+    ;; ...
+
+```
+
+Line ar-reader-remote: Here we return `true` from our reader
+function to trigger the remote call.
+
+Line ar-wire-recon: We must wire up our remote function in the
+`reconciler` with the `:send` keyword parameter.
 
 Now we have added a function that is stubbing out what will eventually
 be an actual call to a remote server.  Our `remote-connection`
