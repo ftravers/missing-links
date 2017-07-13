@@ -374,6 +374,11 @@ project if you haven't already done so:
 
 Checkout the project and branch and launch your REPL.
 
+```clojure
+    lein repl
+
+```
+
 Now try some tests in the REPL:
 
 ```clojure

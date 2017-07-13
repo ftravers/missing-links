@@ -319,6 +319,10 @@ project if you haven't already done so:
 
 Checkout the project and branch and launch your REPL.
 
+#+BEGIN_SRC config
+lein repl
+#+END_SRC
+
 Now try some tests in the REPL:
 
 #+BEGIN_SRC clojure
