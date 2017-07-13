@@ -410,9 +410,10 @@ present any new ideas.
 
 ```
 
-The input params are the same as on the client, and just like the
-client we simply return a map with the answer attached to the `:value`
-key.
+The input params are the same as on the client.
+
+**Line 6:** just like the client we simply return a map with
+the answer attached to the `:value` key.
 
 And our parser is dead simple:
 
