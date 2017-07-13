@@ -43,11 +43,11 @@ World".
    [om.dom :as dom :refer [div]]
    [goog.dom :as gdom]))
 
-(defui SimpleUI
+(defui SimpleUI (ref:ss-comp)
   Object
   (render
    [this]
-   (div nil "Hello World")))
+   (div nil "Hello World"))) (ref:ss-hard-code))
 
 (om/add-root!
  (om/reconciler {}) (ref:ss-recon)
@@ -59,10 +59,10 @@ World".
 ~add-root!~ function, so we include it.  It doesn't do anything at
 this point, but later on we'll see what it does.
 
-We refer to the user interface created by the ~defui~ macro as a
+*Line [[(ss-comp)]]:* we refer to the user interface created by the ~defui~ macro as a
 /Component/.
 
-We've hard-coded "Hello World" into the UI component, which is bad
+*Line [[(ss-hard-code)]]:* we've hard-coded "Hello World" into the UI component, which is bad
 form, lets extract it now.
 
 * Remove State from Component

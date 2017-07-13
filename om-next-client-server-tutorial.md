@@ -93,7 +93,7 @@ World".
      8    Object
      9    (render
     10     [this]
-    11     (div nil "Hello World")))
+    11     (div nil "Hello World"))) (ref:ss-hard-code))
     12  
     13  (om/add-root!
     14   (om/reconciler {})
@@ -106,10 +106,10 @@ World".
 `add-root!` function, so we include it.  It doesn't do anything at
 this point, but later on we'll see what it does.
 
-We refer to the user interface created by the `defui` macro as a
+**Line 7:** we refer to the user interface created by the `defui` macro as a
 *Component*.
 
-We've hard-coded "Hello World" into the UI component, which is bad
+**Line nil:** we've hard-coded "Hello World" into the UI component, which is bad
 form, lets extract it now.
 
 # Remove State from Component<a id="sec-4" name="sec-4"></a>
