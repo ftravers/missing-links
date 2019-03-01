@@ -210,5 +210,4 @@ The main difference is on lines 4-5.
     {:color "red"}]
 #+END_SRC
 
-Just add each new class between
-square brackets [].
+Just add each new class between square brackets [].
