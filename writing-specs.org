@@ -1,0 +1,33 @@
+* About Missing Link Tutorials
+
+I find a lot of technology doesn't have documentation that I can
+relate to.  The style of Missing Link Tutorials is to be clear,
+succint, easy, and to cover concepts and essential practical aspects
+of the topic.  Without further ado...
+
+
+* A function special
+
+Lets say we have a function that expects a map that could be called in
+one of two ways:
+
+#+BEGIN_SRC clojure
+(authenticated {:username "abc" :password "123"})
+
+;; -- OR --
+
+(authenticated {:token "1a2b3c"})
+#+END_SRC
+
+First lets define a basic spec
+
+#+BEGIN_SRC clojure
+(s/def ::date inst?)
+#+END_SRC
+
+This creates a spec called ~date~ that we could use on a piece of data
+like so:
+
+#+BEGIN_SRC clojure
+
+#+END_SRC

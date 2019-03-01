@@ -1,0 +1,120 @@
+* Overview
+
+This document will try to bridge the gap between graphic designers and
+frontend developers in the context of clojurescript (cljs)
+development.  Essentially this document is aimed at graphic designers
+who are ok with learning some basics of cljs to more
+seemlessly iterate with front end cljs devs.
+
+* The HTML
+
+In cljs we write html in a format called [[https://github.com/teropa/hiccups][hiccup]].  Lets compare some
+standard html with the hiccup format.
+
+#+BEGIN_SRC html
+<p>Hello</p>
+#+END_SRC
+
+equivalent hiccup:
+
+#+BEGIN_SRC clojure
+[:p "hello"]
+#+END_SRC
+
+Here is a table of equivalents:
+
+| HTML                        | HICCUP                         |
+|-----------------------------+--------------------------------|
+| <p>fenton<br/>travers</p>   | [:p "fenton" [:br] "travers]   |
+| <a href="abc.com">hello</a> | [:a {:href "abc.com"} "hello"] |
+| <div class=a1>bye</div>     | [:div {:class "a1"} "bye"]     |
+
+That should get us started.  Lets look at the workflow.  How could you
+as a designer actually get some work done.
+
+* Test Project
+
+Clone the following repository:
+
+: git clone git@github.com:ftravers/cljs_crypto.git
+
+Checkout the following tag:
+
+: git checkout basic-cljs-page
+
+Now run the project, put the following command into the terminal in the
+project root:
+
+: clj -A:fe-dev:fig -b dev -r
+
+A browser window should pop up that displays this very basic,
+rudimentary project.
+
+* Project Structure
+
+Lets look at the files in the project:
+
+#+BEGIN_SRC shell
+% tree
+.
+|-- deps.edn
+|-- dev.cljs.edn
+|-- LICENSE
+|-- README.org
+|-- resources
+|   `-- public
+|       `-- index.html
+`-- src
+    `-- cljs_crypto
+        `-- core.cljs
+#+END_SRC
+
+The first file to look at is: ~src/cljs_crypto/core.cljs~.  Here are
+the contents:
+
+#+BEGIN_SRC clojure
+ 1 (ns cljs-crypto.core
+ 2   (:require
+ 3    [rum.core :refer [defc mount] :as rum]))
+ 4 
+ 5 (defc hello-world-component
+ 6   []
+ 7   [:h1 "Hello my friendly, lovely world!"])
+ 8 
+ 9 (defn main-page []
+10   (mount
+11    (hello-world-component)
+12    js/document.body))
+13 
+14 (main-page)
+#+END_SRC
+
+The only line we are going to pay attention to at the moment is
+line 7. 
+
+: [:h1 "Hello my friendly, lovely world!"]
+
+This is the hiccup.  Open this file in the atom editor and make a
+change, and see that get automatically reflected in web browser.
+
+* Editor
+
+Everyone has their favorite editor.  I'm going to recommend using the
+Atom editor for a few reasons.  There are a few handy features that
+we'll take advantage of.  
+
+(1) rainbow delimiters: this will color our parens, brackets and curly
+braces, so we can visually see opening and closing delimiters easily.
+
+(2) parinfer: this will prevent us from creating un-balanced
+delimiters, i.e. we can't have an open paren (, without a closing
+paren ).  
+
+These two things will go a long way into preventing you from getting
+frustrated with counting parenthesis.  Install [[https://atom.io][atom]], for your
+platform.  Afterwards add a few plugins to make the editor better for
+cljs by running the following command from the terminal:
+
+#+BEGIN_SRC shell
+apm install proto-repl ink parinfer lisp-paredit rainbow-delimiters atom-beautify atom-file-icons hasklig
+#+END_SRC

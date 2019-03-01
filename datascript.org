@@ -1,0 +1,44 @@
+* Background
+
+If you are unfamiliar with datomic, probably visit that tutorial
+first. 
+
+* Setup
+
+
+
+* Motivation
+
+With clojurescript applications, some people keep their app state in a
+global atom in the form of a large map.  For example:
+
+#+BEGIN_SRC clojure
+  (def app-state
+    {:user-logged-in true
+     :secure-token "adslkfj23l4jskdlfj42w5j"
+     :email "joe.blow@gmail.com"
+     :user-id 1
+     :friends [{:user-id 2 :name "sally" :status :active}
+               {:user-id 3 :name "bob"}]
+     :co-workers [{:user-id 2 :name "sally" :status :active]})
+#+END_SRC
+
+Why on earth would we ever want to have a small database on the client
+side?  Seems like overkill right?  Well say in our above app, "sally"
+signs off and is no longer active.  I have to update that in two
+places, there is no master record.
+
+#+BEGIN_SRC clojure
+  (def app-state
+    {:user-logged-in true
+     :secure-token "adslkfj23l4jskdlfj42w5j"
+     :email "joe.blow@gmail.com"
+     :user-id 1
+     :users [{:user-id 2 :name "sally" :active :away}]
+     :friends [2 3]
+     :co-workers [2])
+#+END_SRC
+
+I wanted
+to pay "sally" back the 50.50 I owed her.  Since I'm storing that in
+two locations, I have to make sure I update both locations. 

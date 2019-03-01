@@ -326,17 +326,17 @@ lein repl
 Now try some tests in the REPL:
 
 #+BEGIN_SRC clojure
-omn1be.core> (parser {:state users}
-                     '[(:user/authenticated
-                        {:user/name "fenton"
-                         :user/password "passwerd"})])
-#:user{:authenticated false}
+  omn1be.core> (parser {:state users}
+                       '[(:user/authenticated
+                          {:user/name "fenton"
+                           :user/password "passwerd"})])
+  #:user{:authenticated false}
 
-omn1be.core> (parser {:state users}
-                     '[(:user/authenticated
-                        {:user/name "fenton"
-                         :user/password "passwErd"})])
-#:user{:authenticated true}
+  omn1be.core> (parser {:state users}
+                       '[(:user/authenticated
+                          {:user/name "fenton"
+                           :user/password "passwErd"})])
+  #:user{:authenticated true}
 #+END_SRC
 
 Lets quickly look at our reader function, even though it doesn't
