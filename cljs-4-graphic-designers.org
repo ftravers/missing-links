@@ -97,7 +97,7 @@ line 7.
 This is the hiccup.  Open this file in the atom editor and make a
 change, and see that get automatically reflected in web browser.
 
-* Editor
+* A Clojure Friendly Editor
 
 Everyone has their favorite editor.  I'm going to recommend using the
 Atom editor for a few reasons.  There are a few handy features that
@@ -107,8 +107,8 @@ we'll take advantage of.
 braces, so we can visually see opening and closing delimiters easily.
 
 (2) parinfer: this will prevent us from creating un-balanced
-delimiters, i.e. we can't have an open paren (, without a closing
-paren ).  
+delimiters, i.e. we can't have an open paren ~(~, without a closing
+paren ~)~.  
 
 These two things will go a long way into preventing you from getting
 frustrated with counting parenthesis.  Install [[https://atom.io][atom]], for your
@@ -117,4 +117,44 @@ cljs by running the following command from the terminal:
 
 #+BEGIN_SRC shell
 apm install proto-repl ink parinfer lisp-paredit rainbow-delimiters atom-beautify atom-file-icons hasklig
+#+END_SRC
+
+* Adding in CSS
+
+First kill the terminal process if it is still running.  ~Ctrl-d~ will
+kill it.
+
+Now lets add some basic CSS.  Check out the tag: ~basic-css~.
+
+: git checkout basic-css
+
+Fire up the process in the terminal again.
+
+: clj -A:fe-dev:fig -b dev -r
+
+Open the file: ~src/cljs_crypto/core.cljs~ again.
+
+#+BEGIN_SRC clojure
+ 1   (ns cljs-crypto.core
+ 2     (:require
+ 3      [garden.core :refer [css]]
+ 4      [rum.core :refer [defc mount] :as rum]))
+ 5 
+ 6   (def my-style
+ 7     [[:.my-1st-class
+ 8       {:font-size "3em"}]])
+ 9 
+10   (defc hello-world-component
+11     []
+12     [:div
+13      [:style (css my-style)]
+14      [:p {:class :my-1st-class}
+15       "Hello lovely world!"]])
+16 
+17   (defn main-page []
+18     (mount
+19      (hello-world-component)
+20      js/document.body))
+21 
+22   (main-page)
 #+END_SRC
