@@ -129,7 +129,7 @@ CSS.  Check out the tag: ~basic-css~.
 
 : git checkout basic-css
 
-Fire up the process in the terminal again.
+Fire up the CLJS process in the terminal again.
 
 : clj -A:fe-dev:fig -b dev -r
 
@@ -174,6 +174,9 @@ The equivalent in normal CSS would look like:
   font-size: 2em;
 }
 #+END_SRC
+
+Try changing the font size to "3em", see this automatically reflected
+in the webpage.
 
 ** Lets Add a Second Class
   
