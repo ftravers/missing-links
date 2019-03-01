@@ -124,7 +124,8 @@ apm install proto-repl ink parinfer lisp-paredit rainbow-delimiters atom-beautif
 First kill the terminal process if it is still running.  ~Ctrl-d~ will
 kill it.
 
-Now lets add some basic CSS.  Check out the tag: ~basic-css~.
+To add CSS we use a library called [[https://github.com/noprompt/garden][garden]]. Now lets add some basic
+CSS.  Check out the tag: ~basic-css~.
 
 : git checkout basic-css
 
