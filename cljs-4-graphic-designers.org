@@ -142,7 +142,7 @@ Open the file: ~src/cljs_crypto/core.cljs~ again.
  5 
  6   (def my-style
  7     [[:.my-1st-class
- 8       {:font-size "3em"}]])
+ 8       {:font-size "2em"}]])
  9 
 10   (defc hello-world-component
 11     []
@@ -158,3 +158,46 @@ Open the file: ~src/cljs_crypto/core.cljs~ again.
 21 
 22   (main-page)
 #+END_SRC
+
+Now look at lines 6-8.
+
+#+BEGIN_SRC clojure
+  [[:.my-1st-class
+    {:font-size "2em"}]]
+#+END_SRC
+
+The equivalent in normal CSS would look like:
+
+#+BEGIN_SRC css
+.my-1st-class {
+  font-size: 2em;
+}
+#+END_SRC
+
+** Lets Add a Second Class
+  
+Checkout the tag: css-2nd-class
+
+:git checkout css-2nd-class
+
+The relevant parts of the file are:
+
+#+BEGIN_SRC clojure
+ 1 (def my-style
+ 2   [[:.my-1st-class
+ 3     {:font-size "3em"}]
+ 4    [:.my-2nd-class
+ 5     {:color "red"}]])
+ 6 
+ 7 (defc hello-world-component
+ 8   []
+ 9   [:div
+10    [:style (css my-style)]
+11    [:p {:class :my-1st-class}
+12     "Hello lovely world!"]
+13    [:p {:class :my-2nd-class}
+14     "Nice to meet you."]])
+#+END_SRC 
+
+The main difference is on lines 4-5.  Just add each new class between
+square brackets [].
