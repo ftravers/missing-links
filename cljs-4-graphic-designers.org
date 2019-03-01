@@ -199,5 +199,12 @@ The relevant parts of the file are:
 14     "Nice to meet you."]])
 #+END_SRC 
 
-The main difference is on lines 4-5.  Just add each new class between
+The main difference is on lines 4-5.  
+
+#+BEGIN_SRC clojure
+   [:.my-2nd-class
+    {:color "red"}]
+#+END_SRC
+
+Just add each new class between
 square brackets [].
