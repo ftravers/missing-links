@@ -178,7 +178,7 @@ The equivalent in normal CSS would look like:
   
 Checkout the tag: css-2nd-class
 
-:git checkout css-2nd-class
+: git checkout css-2nd-class
 
 The relevant parts of the file are:
 
